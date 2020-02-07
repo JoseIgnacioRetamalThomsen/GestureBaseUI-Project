@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,6 +15,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Azure.Kinect.Sensor;
+
+
+
+
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Threading;
 
 namespace GestureBaseUI_Project
 {
@@ -31,6 +39,27 @@ namespace GestureBaseUI_Project
         private bool runnig = true;
 
         private readonly Microsoft.Azure.Kinect.Sensor.Transformation transform = null;
+
+        [DllImport("user32")]
+        public static extern int SetCursorPos(int x, int y);
+
+        [DllImport("user32.dll")]
+        static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, int dwExtraInfo);
+
+
+
+        [Flags]
+        public enum MouseEventFlags
+        {
+            LEFTDOWN = 0x00000002,
+            LEFTUP = 0x00000004,
+            MIDDLEDOWN = 0x00000020,
+            MIDDLEUP = 0x00000040,
+            MOVE = 0x00000001,
+            ABSOLUTE = 0x00008000,
+            RIGHTDOWN = 0x00000008,
+            RIGHTUP = 0x00000010
+        }
 
         public MainWindow()
         {
@@ -112,6 +141,11 @@ namespace GestureBaseUI_Project
                                    
                                     if(depthPixels[i] < closest)
                                     {
+                                        if(ox == 0)
+                                        {
+                                            ox = cx;
+                                            oy = cy;
+                                        }
                                         closest = depthPixels[i];
                                         cx = x;
                                         cy = y;
@@ -126,8 +160,13 @@ namespace GestureBaseUI_Project
                             }
                             Debug.WriteLine("x: "+ cx);
                             Debug.WriteLine("y: " + cy);
+                            MoveEllipse(cx, cy);
                             Debug.WriteLine(closest);
-
+                            if(closest == 701)
+                            {
+                                mouse_event((uint)MouseEventFlags.LEFTDOWN, 0, 0, 0, 0);
+                                mouse_event((uint)MouseEventFlags.LEFTUP, 0, 0, 0, 0);
+                            }
                         }
 
                     }
@@ -137,6 +176,40 @@ namespace GestureBaseUI_Project
                 }
 
             }
+        }
+
+        int ox =0;
+        int oy= 0;
+        private void MoveEllipse(int cx, int cy)
+        {
+            SetCursorPos(cx, cy);
+            Debug.WriteLine("dif" + (cx - ox));
+            if (cx-ox < 0 )//want to move right
+            {
+
+                MoveX(5);
+            }else if(cx - ox > 0){
+                MoveX(-5);
+            }
+            
+            if(cy-oy < 0)
+            {
+                MoveY(-1);
+            }else if (cy-oy > 0)
+            {
+                MoveY(1);
+            }
+
+
+        }
+        private void MoveX(float amount)
+        {
+
+            Canvas.SetLeft(eli, Canvas.GetLeft(eli) + amount);
+        }
+        private void MoveY(float amount)
+        {
+            Canvas.SetTop(eli, Canvas.GetTop(eli) + amount);
         }
     }
 }

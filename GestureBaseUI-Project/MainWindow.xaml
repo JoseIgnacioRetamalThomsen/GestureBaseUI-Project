@@ -6,11 +6,14 @@
         xmlns:local="clr-namespace:GestureBaseUI_Project"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <StackPanel>
 
-        <Image x:Name="MyIm"></Image>
+        <Image x:Name="MyIm" Width="200"></Image>
         <Label Name="Text" >
             
         </Label>
-    </Grid>
+        <Canvas x:Name="canvas" Width="500" Height="280">
+            <Ellipse x:Name="eli" Height="10" Width="10" Fill="Blue" Canvas.Top="140" Canvas.Left="250" />
+        </Canvas>
+    </StackPanel>
 </Window>
