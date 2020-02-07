@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Azure.Kinect.Sensor;
 
 namespace GestureBaseUI_Project
 {
@@ -20,9 +21,69 @@ namespace GestureBaseUI_Project
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly Device kinect = null;
+
+        private readonly WriteableBitmap bitmap = null;
+        private string StatusText = null;
+        private readonly int colorWidth = 0;
+        private readonly int colorHeight = 0;
+        private bool runnig = true;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            this.kinect = Device.Open();
+
+            this.kinect.StartCameras(new DeviceConfiguration
+            {
+                ColorFormat = Microsoft.Azure.Kinect.Sensor.ImageFormat.ColorBGRA32,
+                ColorResolution = ColorResolution.R1080p,
+                DepthMode = DepthMode.NFOV_2x2Binned,
+                SynchronizedImagesOnly = true
+            });
+
+            this.colorWidth = this.kinect.GetCalibration().ColorCameraCalibration.ResolutionWidth;
+            this.colorHeight = this.kinect.GetCalibration().ColorCameraCalibration.ResolutionWidth;
+
+            this.bitmap = new WriteableBitmap(colorWidth, colorHeight, 96.0, 96.0, PixelFormats.Bgra32, null);
+
+            this.DataContext = this;
+
+
+            this.InitializeComponent();
+            this.Loaded += MainWindow_Loaded;
+
+
+        }
+
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            while(true)
+            {
+                using (Capture capture = await Task.Run(()
+                    => { return this.kinect.GetCapture(); }))
+                {
+                    this.StatusText = "Received Capture:" + capture.Depth.DeviceTimestamp;
+                    Text.Content = this.StatusText;
+
+                    this.bitmap.Lock();
+                    var color = capture.Color;
+                    var region = new Int32Rect(0, 0, color.WidthPixels, color.HeightPixels);
+                    unsafe 
+                    {
+                        using (var pin = color.Memory.Pin())
+                        {
+                            this.bitmap.WritePixels(region, (IntPtr)pin.Pointer, (int)color.Size, color.StrideBytes);
+                        }
+
+                    }
+                    this.bitmap.AddDirtyRect(region);
+                    this.bitmap.Unlock();
+                    MyIm.Source = this.bitmap;
+
+                }
+            }
         }
     }
 }
