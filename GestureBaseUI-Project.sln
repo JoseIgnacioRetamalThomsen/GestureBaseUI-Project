@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29424.173
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestureBaseUI-Project", "GestureBaseUI-Project\GestureBaseUI-Project.csproj", "{AF7C21BD-B94A-4F3C-ADBD-142DAB3CE8CD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF7C21BD-B94A-4F3C-ADBD-142DAB3CE8CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF7C21BD-B94A-4F3C-ADBD-142DAB3CE8CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF7C21BD-B94A-4F3C-ADBD-142DAB3CE8CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF7C21BD-B94A-4F3C-ADBD-142DAB3CE8CD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D374F2B7-C153-4D9F-8254-69300114D09B}
+	EndGlobalSection
+EndGlobal
