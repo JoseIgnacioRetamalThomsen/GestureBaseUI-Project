@@ -89,22 +89,43 @@ namespace GestureBaseUI_Project
                             uint* colorPixels = (uint*)this.bitmap.BackBuffer;
                             ushort* depthPixels = (ushort*)transformedDepth.Memory.Pin().Pointer;
 
-                            int closest = 501;
+                            int closest = 701;
+                            int x = 0;
+                            int y = 0;
+                            int cx =0;
+                            int cy = 0;
                             for(int i = 0; i < this.colorHeight * this.colorWidth; i++)
                             {
-                                if(depthPixels[i]<500 && depthPixels[i] != 0)
+                                if (i > 1036255)
                                 {
+                                    colorPixels[i] = 0;
+                                    continue;
+                                }
+                                x++;
+                                if (i % 1920 == 0)
+                                {
+                                    x = 0;
+                                    y++;
+                                }
+                                if (depthPixels[i]<700 && depthPixels[i] != 0)
+                                {
+                                   
                                     if(depthPixels[i] < closest)
                                     {
-                                        closest = i;
-                                        
+                                        closest = depthPixels[i];
+                                        cx = x;
+                                        cy = y;
+
                                     }
                                     continue;
                                 }
                                 colorPixels[i] = 0;
+                               
+
+
                             }
-                            Debug.WriteLine(this.colorHeight);
-                            Debug.WriteLine(this.colorWidth);
+                            Debug.WriteLine("x: "+ cx);
+                            Debug.WriteLine("y: " + cy);
                             Debug.WriteLine(closest);
 
                         }
