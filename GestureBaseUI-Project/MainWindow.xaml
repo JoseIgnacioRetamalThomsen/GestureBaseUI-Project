@@ -5,10 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GestureBaseUI_Project"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="1200" Width="800">
     <StackPanel>
 
-        <Image x:Name="MyIm" Width="200"></Image>
+        <Image x:Name="MyIm" Width="500"></Image>
+        <Image x:Name="MyIm2" Width="500"></Image>
+        <Image x:Name="MyIm1" Width="500"></Image>
+       
         <Label Name="Text" >
             
         </Label>
