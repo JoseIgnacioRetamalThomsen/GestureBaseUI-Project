@@ -29,5 +29,10 @@ namespace GestureBaseUI_Project
             PictureRecorder pr = new PictureRecorder();
             this.NavigationService.Navigate(pr);
         }
+
+        private void Recorder_Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new Recorder());
+        }
     }
 }
