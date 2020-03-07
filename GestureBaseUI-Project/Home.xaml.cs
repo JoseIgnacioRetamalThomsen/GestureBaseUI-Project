@@ -21,6 +21,8 @@ namespace GestureBaseUI_Project
         public Home()
         {
             InitializeComponent();
+
+           // box.ItemsSource = Enum.GetValues(typeof(HandGestures));
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -33,6 +35,11 @@ namespace GestureBaseUI_Project
         private void Recorder_Button_Click(object sender, RoutedEventArgs e)
         {
             this.NavigationService.Navigate(new Recorder());
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new Prediction());
         }
     }
 }

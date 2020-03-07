@@ -134,6 +134,7 @@ namespace GestureBaseUI_Project
                         this.transform.DepthImageToColorCamera(capture, transformedDepth);
 
                         this.bitmap.Lock();
+
                         var color = capture.Color;
 
                         var region = new Int32Rect(0, 0, color.WidthPixels, (int)(color.HeightPixels / 1));
@@ -191,12 +192,7 @@ namespace GestureBaseUI_Project
                                             y++;
                                         }
 
-
-
-
-
-
-
+                                    
                                         //colorPixels[i] = 0;
                                         //// Compute the pixel's color.
                                         int color_data = 255 << 16; // R
@@ -226,6 +222,8 @@ namespace GestureBaseUI_Project
 
                                             colorPixels[i] = (uint)color_data;
                                         }
+
+                                        //insede the square
                                         if ((y - ss) < ((int)temp.Value.Y) && (y + ss) > ((int)temp.Value.Y) && (x - ss) < ((int)temp.Value.X) && (x + ss) > ((int)temp.Value.X))
                                         {
                                             if (isFirst)
@@ -253,10 +251,7 @@ namespace GestureBaseUI_Project
 
                                         if (depthPixels[i] < pos.Z + 100 && depthPixels[i] > pos.Z - 100 && depthPixels[i] != 0)
                                         {
-
-
-
-
+                                                                                        
                                             if (depthPixels[i] < closest)
                                             {
 
