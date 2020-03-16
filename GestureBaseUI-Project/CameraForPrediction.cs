@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Numerics;
 using System.Diagnostics;
 using System.Collections.Concurrent;
+using GestureBaseUI_Project.model;
 
 namespace GestureBaseUI_Project
 {
@@ -64,11 +65,14 @@ namespace GestureBaseUI_Project
         /// </summary>
         private bool running = true;
 
+        private StateManager manager;
 
-        public CameraForPrediction(BlockingCollection<float[,]> im)
+        public CameraForPrediction(BlockingCollection<float[,]> im, StateManager manager )
         {
+            this.manager = manager;
+
             this.images = im;
-            Debug.WriteLine("Created");
+           // Debug.WriteLine("Created");
             // Open the default device
             this.kinect = Device.Open();
 
@@ -78,7 +82,8 @@ namespace GestureBaseUI_Project
                 ColorFormat = Microsoft.Azure.Kinect.Sensor.ImageFormat.ColorBGRA32,
                 ColorResolution = ColorResolution.R720p,
                 DepthMode = DepthMode.NFOV_2x2Binned,
-                SynchronizedImagesOnly = true
+                SynchronizedImagesOnly = true,
+                CameraFPS = FPS.FPS30
             });
 
             this.transform = this.kinect.GetCalibration().CreateTransformation();
@@ -107,7 +112,7 @@ namespace GestureBaseUI_Project
 
         private async void Recorder_Loaded()
         {
-            Debug.WriteLine("in recorder");
+           // Debug.WriteLine("in recorder");
             //body track 
             using (Tracker tracker = Tracker.Create(this.kinect.GetCalibration(), new TrackerConfiguration() { ProcessingMode = TrackerProcessingMode.Gpu, SensorOrientation = SensorOrientation.Default }))
             // sensor camera
@@ -151,8 +156,11 @@ namespace GestureBaseUI_Project
 
                                 var body = frame.GetBodySkeleton(0);
                                 var pos = body.GetJoint(JointId.HandRight).Position;
+                                var fpos = body.GetJoint(JointId.HandTipRight).Position;
                                 conf = body.GetJoint(JointId.HandRight).ConfidenceLevel;
-                             
+                                Quaternion orin = body.GetJoint(JointId.HandTipRight).Quaternion;
+                                Debug.WriteLine(orin);
+                                //   Debug.WriteLine(pos);
                                 /*
                                 if (conf == JointConfidenceLevel.Low)
                                 {
@@ -165,11 +173,21 @@ namespace GestureBaseUI_Project
 
                                 //  Debug.WriteLine("confidende level   : " + conf);
                                 // transfor position to capture camera
+                                var oldHand = handpositionGlobal;
                                 var handposition = kinect.GetCalibration().TransformTo2D(pos, CalibrationDeviceType.Depth, CalibrationDeviceType.Color);
                                 handpositionGlobal.X = handposition.Value.X;
                                 handpositionGlobal.Y = handposition.Value.Y;
                                 // z is the same
                                 handpositionGlobal.Z = pos.Z;
+                                //if(body.GetJoint(JointId.HandTipRight).ConfidenceLevel == JointConfidenceLevel.Low)
+                                //{
+                                //    manager.SetPosition(oldHand);
+                                //}
+                                //else {
+                                //Debug.WriteLine(handpositionGlobal);
+                                    manager.SetPosition(handpositionGlobal);
+                              //  }
+                               
                             }
                         }
 
@@ -240,6 +258,7 @@ namespace GestureBaseUI_Project
                             
 
                             images.Add(fotoS);
+                           // Debug.WriteLine("add from queue");
                             if (images.Count > 10)
                             {
                                 

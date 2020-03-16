@@ -3,6 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -23,26 +24,60 @@ namespace GestureBaseUI_Project
     /// </summary>
     public partial class Prediction : Page
     {
-       
-       
+        //https://stackoverflow.com/a/4232281
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool GetCursorPos(ref Win32Point pt);
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct Win32Point
+        {
+            public Int32 X;
+            public Int32 Y;
+        };
+
+        [DllImport("user32")]
+        public static extern int SetCursorPos(int x, int y);
+        public void SetPointPosition(float x,float y)
+        {
+            
+
+            //Canvas.SetLeft(Point, x);
+            //Canvas.SetTop(Point, y);
+            SetCursorPos((int)x, (int)y);
+
+        }
+        public   void SetColor(Color color)
+        {
+            Point.Fill = new SolidColorBrush(color);
+        }
+        static StateManager manager;
         public Prediction()
         {
             InitializeComponent();
+            Debug.WriteLine(System.Windows.SystemParameters.PrimaryScreenWidth  +"  "+System.Windows.SystemParameters.PrimaryScreenHeight);
 
-              AState[] states = new AState[] { new MovingState(), new RightDownState()};
-             StateManager manager = new StateManager(states);
+            Win32Point point = new Win32Point();
+            GetCursorPos(ref point);
+            Debug.WriteLine(point.X + " " + point.Y);
 
-          //  new Thread(() =>
-          //  {
-                BlockingCollection<float[,]> images = new BlockingCollection<float[,]>();
-                CameraForPrediction predictor = new CameraForPrediction(images);
+            AState[] states = new AState[] { new MovingState(this), new RightDownState(this)};
+              manager  = new StateManager(states,this);
+            
+          //  Info.Content = manager.StatusText;
+          
+            //  new Thread(() =>
+            //  {
+            BlockingCollection<float[,]> images = new BlockingCollection<float[,]>();
+             CameraForPrediction predictor = new CameraForPrediction(images,manager);
 
             new Thread(() =>
             {
                 while (true)
                 {
+                   // Debug.WriteLine("Count " + images.Count);
                     float[,] im = images.Take();
-
+                   // Debug.WriteLine("take from queue");
                     manager.AddImage(im);
                     //StringBuilder b = new StringBuilder();
                     //for (int i = 0; i < 30; i++)
@@ -53,10 +88,11 @@ namespace GestureBaseUI_Project
                     //    }
                     //}
                     //Debug.WriteLine(b);
+                  
 
                 }
             }).Start();
-
+         
 
             /*
             new Thread(() =>

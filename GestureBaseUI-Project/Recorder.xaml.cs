@@ -36,7 +36,7 @@ namespace GestureBaseUI_Project
     /// </summary>
     public partial class Recorder : Page
     {
-        const int PICTURE_NUMBER = 10;
+        const int PICTURE_NUMBER = 200;
 
         private readonly Microsoft.Azure.Kinect.Sensor.Transformation transform = null;
         /// <summary>
@@ -195,12 +195,12 @@ namespace GestureBaseUI_Project
 
                         // for final image
                         uint[,] foto = new uint[300, 300];
-                        uint[,] fotoS = new uint[30, 30];
+                        float[,] fotoS = new float[30, 30];
                         for (int i = 0; i < 30; i++)
                         {
                             for (int j = 0; j < 30; j++)
                             {
-                                fotoS[i, j] = 255;
+                                fotoS[i, j] = 1;
                             }
                         }
 
@@ -345,15 +345,16 @@ namespace GestureBaseUI_Project
 
 
                                             int deep = (((int)depthPixels[i] - ((int)handpositionGlobal.Z - 150)) * 250) / 200;
+                                            float deepF = deep / 255.0f;
 
                                             foto[y - yref, x - xref] = (uint)deep;
 
                                             uint xs = (uint)((x - xref) / 10);
                                             uint ys = (uint)((y - yref) / 10);
 
-                                            if ((uint)deep > fotoS[ys, xs])
+                                            if (deepF > fotoS[ys, xs] || fotoS[ys, xs]==1)
                                             {
-                                                fotoS[ys, xs] = (uint)deep;
+                                                fotoS[ys, xs] = deepF;
                                             }
 
                                             //Debug.WriteLine(deep);
@@ -363,7 +364,7 @@ namespace GestureBaseUI_Project
                                         }
                                         else
                                         {
-                                            foto[y - yref, x - xref] = 255;
+                                            foto[y - yref, x - xref] = 1;
 
                                             uint xs = (uint)((x - xref) / 10);
                                             uint ys = (uint)((y - yref) / 10);
@@ -401,7 +402,7 @@ namespace GestureBaseUI_Project
                             }
                             actual--;
                         }
-                        Predict(fotoS);
+                        //Predict(fotoS);
                     }
                 }
             }
@@ -419,11 +420,11 @@ namespace GestureBaseUI_Project
             //Debug.WriteLine(output);
         }
 
-        private void WriteToFile(uint[,] foto, HandGestures gest)
+        private void WriteToFile(float[,] foto, HandGestures gest)
         {
 
             using (System.IO.StreamWriter file =
-           new System.IO.StreamWriter(@"C:\Users\Public\TestFolder\imagestest.txt", true))
+           new System.IO.StreamWriter(@"C:\Users\Public\gesture\image.txt", true))
             {
                 for (int i = 0; i < 30; i++)
                 {
@@ -438,7 +439,7 @@ namespace GestureBaseUI_Project
             }
 
             using (System.IO.StreamWriter file =
-         new System.IO.StreamWriter(@"C:\Users\Public\TestFolder\labels.txt", true))
+         new System.IO.StreamWriter(@"C:\Users\Public\gesture\labels.txt", true))
             {
 
                 file.Write((int)gest);
@@ -513,7 +514,6 @@ namespace GestureBaseUI_Project
     }
     enum HandGestures
     {
-        StraitPoint, ThumbUp, thumbDown, Click, OpenPalm, ClosedFist, SlapDown, SlapUp, IndexFingerUp, PeaceSign
-
+        StraitVertial, StraitHorizontal, FistVertical, FistHorizotan, TombIndexVertical, TombIndexHorizontal, SlapDown, SlapUp, SlapFront, FullHand
     }
 }

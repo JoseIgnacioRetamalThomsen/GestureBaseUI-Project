@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Windows.Media;
 
 namespace GestureBaseUI_Project
 {
     public class RightDownState : AState
     {
         private State myState = State.RightDown;
+        private Prediction prediction;
+
+        public RightDownState(Prediction prediction)
+        {
+            this.prediction = prediction;
+        }
+
         public override State GetStateName()
         {
             return myState;
@@ -16,6 +24,7 @@ namespace GestureBaseUI_Project
         public override void OnEnter(IState from)
         {
             Debug.WriteLine(myState + " on enter");
+            prediction.SetColor(Colors.Yellow);
         }
 
         public override void OnExit(IState to)
