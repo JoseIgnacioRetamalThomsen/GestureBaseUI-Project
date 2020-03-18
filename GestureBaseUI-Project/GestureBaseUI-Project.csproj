@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="model\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="model\gesture_model.pb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

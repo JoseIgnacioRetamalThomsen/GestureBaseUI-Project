@@ -424,7 +424,7 @@ namespace GestureBaseUI_Project
         {
 
             using (System.IO.StreamWriter file =
-           new System.IO.StreamWriter(@"C:\Users\Public\gesture\image.txt", true))
+           new System.IO.StreamWriter(@"C:\Users\Public\gesture\images.txt", true))
             {
                 for (int i = 0; i < 30; i++)
                 {
@@ -514,6 +514,8 @@ namespace GestureBaseUI_Project
     }
     enum HandGestures
     {
-        StraitVertial, StraitHorizontal, FistVertical, FistHorizotan, TombIndexVertical, TombIndexHorizontal, SlapDown, SlapUp, SlapFront, FullHand
-    }
+        // 0    1          2      3        4    5     6     7    8      |9
+       // Move,MoveTumbUp, Click, Scroll, TobmUp, One, Two, Three, Four, Five
+        One, Two, Three, four, Five, Six, Seven, Eight, Nive, Ten
+    }  //mc   mr   ml      mt     mb  c1     c2   c3   c4     
 }

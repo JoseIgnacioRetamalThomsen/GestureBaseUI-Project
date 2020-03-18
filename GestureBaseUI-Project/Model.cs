@@ -45,10 +45,10 @@ namespace GestureBaseUI_Project
             // create tensor using image 
             var tensor = TFTensor.FromBuffer(new TFShape(1, 30, 30, 1), image, 0, image.Length);
 
-            // set input layer
+            // set inputput layer
             runner.AddInput(_session.Graph[INPUT_NAME][0], tensor);
 
-            // set outlayer
+            // set output layer
             runner.Fetch(_session.Graph[OUTPUT_NAME][0]);
 
             // run the model

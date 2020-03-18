@@ -159,7 +159,7 @@ namespace GestureBaseUI_Project
                                 var fpos = body.GetJoint(JointId.HandTipRight).Position;
                                 conf = body.GetJoint(JointId.HandRight).ConfidenceLevel;
                                 Quaternion orin = body.GetJoint(JointId.HandTipRight).Quaternion;
-                                Debug.WriteLine(orin);
+                                //Debug.WriteLine(orin);
                                 //   Debug.WriteLine(pos);
                                 /*
                                 if (conf == JointConfidenceLevel.Low)

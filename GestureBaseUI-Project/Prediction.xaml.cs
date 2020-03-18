@@ -30,7 +30,7 @@ namespace GestureBaseUI_Project
         internal static extern bool GetCursorPos(ref Win32Point pt);
 
         [StructLayout(LayoutKind.Sequential)]
-        internal struct Win32Point
+        public  struct Win32Point
         {
             public Int32 X;
             public Int32 Y;
@@ -38,13 +38,13 @@ namespace GestureBaseUI_Project
 
         [DllImport("user32")]
         public static extern int SetCursorPos(int x, int y);
-        public void SetPointPosition(float x,float y)
+        public void SetPointPosition(Win32Point point)
         {
             
 
             //Canvas.SetLeft(Point, x);
             //Canvas.SetTop(Point, y);
-            SetCursorPos((int)x, (int)y);
+            SetCursorPos(point.X, point.Y);
 
         }
         public   void SetColor(Color color)
@@ -59,10 +59,20 @@ namespace GestureBaseUI_Project
 
             Win32Point point = new Win32Point();
             GetCursorPos(ref point);
-            Debug.WriteLine(point.X + " " + point.Y);
+           // Debug.WriteLine(point.X + " " + point.Y);
 
             AState[] states = new AState[] { new MovingState(this), new RightDownState(this)};
-              manager  = new StateManager(states,this);
+
+            Win32Point position = new Win32Point();
+            GetCursorPos(ref position);
+
+            MousePositionController mc = new MousePositionController(
+                (int)System.Windows.SystemParameters.PrimaryScreenWidth,
+               (int) System.Windows.SystemParameters.PrimaryScreenHeight,
+                position.X,
+                position.Y
+                );
+              manager  = new StateManager(states,this, mc);
             
           //  Info.Content = manager.StatusText;
           
@@ -75,8 +85,9 @@ namespace GestureBaseUI_Project
             {
                 while (true)
                 {
-                   // Debug.WriteLine("Count " + images.Count);
+                    Debug.WriteLine("Count " + images.Count);
                     float[,] im = images.Take();
+                   
                    // Debug.WriteLine("take from queue");
                     manager.AddImage(im);
                     //StringBuilder b = new StringBuilder();

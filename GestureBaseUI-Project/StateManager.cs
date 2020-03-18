@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Media;
+using static GestureBaseUI_Project.Prediction;
 
 namespace GestureBaseUI_Project.model
 {
@@ -17,6 +18,8 @@ namespace GestureBaseUI_Project.model
         /// INotifyPropertyChangedPropertyChanged event to allow window controls to bind to changeable data
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private MousePositionController mouseController;
 
         private string statusText;
         /// <summary>
@@ -55,10 +58,12 @@ namespace GestureBaseUI_Project.model
         private  Vector3 position = new Vector3();
         Prediction pred;
         int tc = 0;
-        public StateManager(AState[] states, Prediction prediction)
+        public StateManager(AState[] states, Prediction prediction,MousePositionController mousecontroller)
         {
             pred = prediction;
-           
+
+
+            this.mouseController = mousecontroller;
 
             model = new Model(System.IO.Path.Combine(Environment.CurrentDirectory, @"model\gesture_model.pb"));
 
@@ -84,11 +89,11 @@ namespace GestureBaseUI_Project.model
         bool isFirstPosition = true;
         Vector3 MousePosition = Vector3.Zero;
         MousePositionController mc;
-         public void SetPosition(Vector3 newpos)
-        {
+        public void SetPosition(Vector3 newpos)
+        {/*
             if (isFirstPosition)
             {
-                Debug.WriteLine("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+               // Debug.WriteLine("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
                 mc = new MousePositionController(new Vector2(newpos.X,newpos.Y));
                 mc.startMoving(new Vector2(600, 600), new Vector2(newpos.X, newpos.Y));
                 isFirstPosition = false;
@@ -96,9 +101,16 @@ namespace GestureBaseUI_Project.model
             }
 
             Vector2 temp = mc.getNextPosition(new Vector2(newpos.X, newpos.Y));
-            pred.SetPointPosition(temp.X, temp.Y);
+            */
+            Win32Point temp = mouseController.getNextPosition(new Vector2(newpos.X, newpos.Y));
+            //pred.SetPointPosition(1920, 1200);
+            pred.SetPointPosition(temp);
 
             return;
+        }
+
+       
+            /*
             float newX = newpos.X;
             float newY = newpos.Y;
             float moveDistance=0;
@@ -210,11 +222,14 @@ namespace GestureBaseUI_Project.model
 
             this.position = newpos;
         }
+        */
         private int actualState = 0;
         public int getActualState()
         {
             return actualState;
         }
+
+            
         public void AddImage(float[,] image)
         {
 
@@ -236,7 +251,7 @@ namespace GestureBaseUI_Project.model
             float max = p.Max();
             int m = Array.IndexOf(p, max);
             //StatusText = m.ToString();
-            //Debug.WriteLine(m);
+            Debug.WriteLine(m);
             actualState = m;
             /*
             if(m== 0)
@@ -297,7 +312,7 @@ namespace GestureBaseUI_Project.model
             AState state;
             if (!m_StateDict.TryGetValue(s, out state))
             {
-                Debug.WriteLine("Can't find the state named " + s);
+               // Debug.WriteLine("Can't find the state named " + s);
                 return;
             }
 
