@@ -157,7 +157,7 @@ namespace GestureBaseUI_Project
                                 var body = frame.GetBodySkeleton(0);
                                 var pos = body.GetJoint(JointId.HandRight).Position;
                                 var fpos = body.GetJoint(JointId.HandTipRight).Position;
-                                conf = body.GetJoint(JointId.HandRight).ConfidenceLevel;
+                                conf = body.GetJoint(JointId.HandTipRight).ConfidenceLevel;
                                 Quaternion orin = body.GetJoint(JointId.HandTipRight).Quaternion;
                                 //Debug.WriteLine(orin);
                                 //   Debug.WriteLine(pos);
@@ -174,7 +174,7 @@ namespace GestureBaseUI_Project
                                 //  Debug.WriteLine("confidende level   : " + conf);
                                 // transfor position to capture camera
                                 var oldHand = handpositionGlobal;
-                                var handposition = kinect.GetCalibration().TransformTo2D(pos, CalibrationDeviceType.Depth, CalibrationDeviceType.Color);
+                                var handposition = kinect.GetCalibration().TransformTo2D(fpos, CalibrationDeviceType.Depth, CalibrationDeviceType.Color);
                                 handpositionGlobal.X = handposition.Value.X;
                                 handpositionGlobal.Y = handposition.Value.Y;
                                 // z is the same
@@ -185,6 +185,7 @@ namespace GestureBaseUI_Project
                                 //}
                                 //else {
                                 //Debug.WriteLine(handpositionGlobal);
+                                if(conf != JointConfidenceLevel.Low)
                                     manager.SetPosition(handpositionGlobal);
                               //  }
                                

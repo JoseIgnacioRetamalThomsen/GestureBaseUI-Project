@@ -55,7 +55,7 @@ namespace GestureBaseUI_Project
 
         private bool Moveright(int x)
         {
-            int distanceRemaining = this.width - mouseLastPosition.X;
+            int distanceRemaining = this.width- mouseLastPosition.X;
            // Debug.WriteLine("rem: "+distanceRemaining);
             int distanceToMove = (distanceRemaining * x)/100;
             mouseNextPosition.X = mouseLastPosition.X + distanceToMove;
@@ -63,12 +63,13 @@ namespace GestureBaseUI_Project
         }
         private bool MoveLeft(int x)
         {
-            int distanceRemaining = this.width;
+            int distanceRemaining = this.mouseLastPosition.Y;
            // Debug.WriteLine("rem: " + distanceRemaining);
             int distanceToMove = (distanceRemaining * x) / 100;
             mouseNextPosition.X = mouseLastPosition.X - distanceToMove;
             return true;
         }
+        int moveMult = 2;
         public Prediction.Win32Point getNextPosition(Vector2 newHandPosition)
         {
           
@@ -84,23 +85,28 @@ namespace GestureBaseUI_Project
             {
                 moveDistance = 1;
             }else
-                if(abs_dx<20)
+                if(abs_dx<10)
             {
                 moveDistance = 5;
 
             }else
-            if (abs_dx<30)
+            if (abs_dx<20)
             {
                 moveDistance = 30;
             }
             else
-            if(abs_dx <50)
+            if(abs_dx <30)
             {
-                moveDistance = 50;
+                moveDistance = 70;
+            }
+            else
+            if(abs_dx<90)
+            {
+                moveDistance = 90;
             }
             else
             {
-                moveDistance = 70;
+                moveDistance = 0;
             }
             //Debug.WriteLine(dx);
             _startHandPosition = newHandPosition;
@@ -131,6 +137,9 @@ namespace GestureBaseUI_Project
            
             if (dx > 0)//left
             {
+                _horizontalState = HorizontalState.Left;
+                MoveLeft(moveDistance);
+                /*
                 if (_horizontalState == HorizontalState.Right)
                 {
                     //  Debug.WriteLine("Idle");
@@ -150,13 +159,16 @@ namespace GestureBaseUI_Project
                     _horizontalState = HorizontalState.Left;
                     MoveLeft(moveDistance);
                 }
-
+                */
 
 
             }
             else
                 if (dx < 0)///right
             {
+                _horizontalState = HorizontalState.Idle;
+                Moveright(moveDistance);
+                /*
                 if (_horizontalState == HorizontalState.Left)
                 {
                     //  Debug.WriteLine("Idle");
@@ -178,7 +190,7 @@ namespace GestureBaseUI_Project
 
                 }
 
-
+    */
             }
 
             mouseLastPosition.X = mouseNextPosition.X;
