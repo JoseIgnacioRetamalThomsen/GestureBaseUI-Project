@@ -10,6 +10,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Speech.Recognition;
+using System.Windows;
+
+
 
 namespace GestureBaseUI_Project
 {
