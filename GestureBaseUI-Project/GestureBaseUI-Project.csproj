@@ -15,6 +15,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <COMReference Include="{215d64d2-031c-33c7-96e3-61794cd1ee61}">
+      <Guid>215d64d2-031c-33c7-96e3-61794cd1ee61</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>4</VersionMinor>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+    <COMReference Include="{e6da930b-bba5-44df-ac6f-fe60c1eddec8}">
+      <Guid>e6da930b-bba5-44df-ac6f-fe60c1eddec8</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>4</VersionMinor>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Kinect.BodyTracking" Version="1.0.0" />
     <PackageReference Include="Microsoft.Azure.Kinect.Sensor" Version="1.3.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
@@ -23,6 +38,12 @@
 
   <ItemGroup>
     <Folder Include="model\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Speech">
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\Reference Assemblies\Microsoft\Framework\v3.0\System.Speech.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
