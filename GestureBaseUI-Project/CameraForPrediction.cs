@@ -75,9 +75,23 @@ namespace GestureBaseUI_Project
            // Debug.WriteLine("Created");
             // Open the default device
             this.kinect = Device.Open();
+            
 
             // Configure camera modes
             this.kinect.StartCameras(new DeviceConfiguration
+            {
+                ColorFormat = Microsoft.Azure.Kinect.Sensor.ImageFormat.ColorBGRA32,
+                ColorResolution = ColorResolution.R720p
+                ,
+                DepthMode = DepthMode.NFOV_Unbinned,
+                SynchronizedImagesOnly = true,
+                CameraFPS = FPS.FPS30
+            });
+
+
+            /*
+             *      
+               this.kinect.StartCameras(new DeviceConfiguration
             {
                 ColorFormat = Microsoft.Azure.Kinect.Sensor.ImageFormat.ColorBGRA32,
                 ColorResolution = ColorResolution.R720p,
@@ -85,7 +99,7 @@ namespace GestureBaseUI_Project
                 SynchronizedImagesOnly = true,
                 CameraFPS = FPS.FPS30
             });
-
+             * */
             this.transform = this.kinect.GetCalibration().CreateTransformation();
 
             this.colorWidth = this.kinect.GetCalibration().ColorCameraCalibration.ResolutionWidth;
@@ -109,6 +123,8 @@ namespace GestureBaseUI_Project
         }
 
         Vector3 handpositionGlobal;
+        int ox = 0;
+        int oy = 0;
 
         private async void Recorder_Loaded()
         {
@@ -136,11 +152,12 @@ namespace GestureBaseUI_Project
                             }
                         }
 
+                       
                         this.transform.DepthImageToColorCamera(capture, transformedDepth);
 
                         // Queue latest frame from the sensor.
                         tracker.EnqueueCapture(capture);
-
+                       
                         //get position of the hand
                         using (Microsoft.Azure.Kinect.BodyTracking.Frame frame = tracker.PopResult(TimeSpan.Zero, throwOnTimeout: false))
                         {
@@ -153,11 +170,13 @@ namespace GestureBaseUI_Project
                                 }
                                 var numOfSkeletos = frame.NumberOfBodies;
                                 // Debug.WriteLine("num of bodies: " + numOfSkeletos);
-
+                                
                                 var body = frame.GetBodySkeleton(0);
                                 var pos = body.GetJoint(JointId.HandRight).Position;
+                                
                                 var fpos = body.GetJoint(JointId.HandTipRight).Position;
-                                conf = body.GetJoint(JointId.HandTipRight).ConfidenceLevel;
+                                var rpost = body.GetJoint(JointId.WristRight).Position;
+                                conf = body.GetJoint(JointId.HandRight).ConfidenceLevel;
                                 Quaternion orin = body.GetJoint(JointId.HandTipRight).Quaternion;
                                 //Debug.WriteLine(orin);
                                 //   Debug.WriteLine(pos);
@@ -174,7 +193,8 @@ namespace GestureBaseUI_Project
                                 //  Debug.WriteLine("confidende level   : " + conf);
                                 // transfor position to capture camera
                                 var oldHand = handpositionGlobal;
-                                var handposition = kinect.GetCalibration().TransformTo2D(fpos, CalibrationDeviceType.Depth, CalibrationDeviceType.Color);
+                                //set hand for prediction square
+                                var handposition = kinect.GetCalibration().TransformTo2D(pos, CalibrationDeviceType.Depth, CalibrationDeviceType.Color);
                                 handpositionGlobal.X = handposition.Value.X;
                                 handpositionGlobal.Y = handposition.Value.Y;
                                 // z is the same
@@ -185,8 +205,12 @@ namespace GestureBaseUI_Project
                                 //}
                                 //else {
                                 //Debug.WriteLine(handpositionGlobal);
-                                if(conf != JointConfidenceLevel.Low)
-                                    manager.SetPosition(handpositionGlobal);
+                                
+
+                                // set position for mouse move
+
+                                if(conf == JointConfidenceLevel.Medium || conf == JointConfidenceLevel.High)
+                                    manager.SetPosition(pos);
                               //  }
                                
                             }
@@ -213,6 +237,7 @@ namespace GestureBaseUI_Project
                                 bool isFirst = true;
                                 int xref = 0, yref = 0;
                                 int squareSize = 150;
+                                
                                 for (int i = 0; i < this.colorHeight * this.colorWidth; i++)
                                 {
                                     x++;
@@ -230,6 +255,23 @@ namespace GestureBaseUI_Project
                                             yref = y;
                                             isFirst = false;
                                         }
+
+
+                                        if (depthPixels[i] < closest)
+                                        {
+
+                                            if (ox == 0)
+                                            {
+                                                ox = cx;
+                                                oy = cy;
+                                            }
+                                            closest = depthPixels[i];
+
+                                            cx = x;
+                                            cy = y;
+
+                                        }
+
 
                                         //select pixels insede the selected deep
                                         if (depthPixels[i] < handpositionGlobal.Z + 50 && depthPixels[i] > handpositionGlobal.Z - 150 && depthPixels[i] != 0)
@@ -249,8 +291,13 @@ namespace GestureBaseUI_Project
                                     }
 
                                 }
+
+                               // manager.SetPosition(new Vector3(cx, cy, 0));
                             }
                             
+
+
+
                         }
 
                         if (conf != JointConfidenceLevel.Low)

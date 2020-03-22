@@ -70,10 +70,37 @@ namespace GestureBaseUI_Project
             return true;
         }
         int moveMult = 2;
+        float relationX = 1920 / 300;
+        float relationY = 1200 / 150;
+
+        int x_boundary_left = 600;
+        int x_boundary_right = 200;
+        private Vector2 oldHandPosition = Vector2.Zero;
+        private Win32Point last = new Win32Point { 
+        X=0,Y=0};
         public Prediction.Win32Point getNextPosition(Vector2 newHandPosition)
         {
-          
-            
+            if(Math.Abs(oldHandPosition.Y- newHandPosition.Y) <0.1 || Math.Abs(oldHandPosition.X - newHandPosition.X) < 0.1)
+            {
+
+                oldHandPosition = newHandPosition;
+                return last;
+            }
+
+            //float xh = 600 - newHandPosition.X;
+            float xh =  - newHandPosition.X;
+            float xs = xh * relationX;
+
+            float yh =  100 + newHandPosition.Y;
+            //float yh =  newHandPosition.Y -200;
+            float ys = yh * relationY;
+            Debug.WriteLine("x position: " + newHandPosition.X + " " + xh + " " + xs);
+            Debug.WriteLine("y position: " + newHandPosition.Y + " " + yh + " " + ys);
+
+            oldHandPosition = newHandPosition;
+            last.X = (int)xs;
+            last.Y = (int)ys;
+            return last;
             int newX = 0;
             float dx = newHandPosition.X - _startHandPosition.X;
             //_startMousePosition = newHandPosition;
