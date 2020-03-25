@@ -17,13 +17,11 @@ namespace GestureBaseUI_Project
     public class CameraForPrediction
     {
 
-        BlockingCollection<float[,]> images; //= new LinkedList<uint[,]>();
-
-
-
+        BlockingCollection<float[,]> images; 
+                
         private readonly Transformation transform = null;
 
-
+        private ActionManager manager;
 
         /// <summary>
         /// Azure Kinect sensor
@@ -65,7 +63,7 @@ namespace GestureBaseUI_Project
         /// </summary>
         private bool running = true;
 
-        private ActionManager manager;
+       
 
         public CameraForPrediction(BlockingCollection<float[,]> im, ActionManager manager )
         {
@@ -88,19 +86,7 @@ namespace GestureBaseUI_Project
                 CameraFPS = FPS.FPS30
             });
 
-
-            /*
-             *      
-               this.kinect.StartCameras(new DeviceConfiguration
-            {
-                ColorFormat = Microsoft.Azure.Kinect.Sensor.ImageFormat.ColorBGRA32,
-                ColorResolution = ColorResolution.R720p,
-                DepthMode = DepthMode.NFOV_2x2Binned,
-                SynchronizedImagesOnly = true,
-                CameraFPS = FPS.FPS30
-            });
-             * */
-            this.transform = this.kinect.GetCalibration().CreateTransformation();
+           this.transform = this.kinect.GetCalibration().CreateTransformation();
 
             this.colorWidth = this.kinect.GetCalibration().ColorCameraCalibration.ResolutionWidth;
             this.colorHeight = this.kinect.GetCalibration().ColorCameraCalibration.ResolutionHeight;
@@ -122,13 +108,13 @@ namespace GestureBaseUI_Project
             }
         }
 
-        Vector3 handpositionGlobal;
+        Vector3 HandPositionColor;
         int ox = 0;
         int oy = 0;
 
         private async void Recorder_Loaded()
         {
-           // Debug.WriteLine("in recorder");
+         
             //body track 
             using (Tracker tracker = Tracker.Create(this.kinect.GetCalibration(), new TrackerConfiguration() { ProcessingMode = TrackerProcessingMode.Gpu, SensorOrientation = SensorOrientation.Default }))
             // sensor camera
@@ -143,16 +129,15 @@ namespace GestureBaseUI_Project
                     using (Capture capture = await Task.Run(() => { return this.kinect.GetCapture(); }))
                     {
                         //create output array that represent the image
-                        float[,] fotoS = new float[30, 30];
+                        float[,] actualPhoto = new float[30, 30];
                         for (int i = 0; i < 30; i++)
                         {
                             for (int j = 0; j < 30; j++)
                             {
-                                fotoS[i, j] = 255;
+                                actualPhoto[i, j] = 255;
                             }
                         }
-
-                       
+                                               
                         this.transform.DepthImageToColorCamera(capture, transformedDepth);
 
                         // Queue latest frame from the sensor.
@@ -192,13 +177,13 @@ namespace GestureBaseUI_Project
 
                                 //  Debug.WriteLine("confidende level   : " + conf);
                                 // transfor position to capture camera
-                                var oldHand = handpositionGlobal;
+                                var oldHand = HandPositionColor;
                                 //set hand for prediction square
                                 var handposition = kinect.GetCalibration().TransformTo2D(pos, CalibrationDeviceType.Depth, CalibrationDeviceType.Color);
-                                handpositionGlobal.X = handposition.Value.X;
-                                handpositionGlobal.Y = handposition.Value.Y;
+                                HandPositionColor.X = handposition.Value.X;
+                                HandPositionColor.Y = handposition.Value.Y;
                                 // z is the same
-                                handpositionGlobal.Z = pos.Z;
+                                HandPositionColor.Z = pos.Z;
                               
 
                                 if(conf == JointConfidenceLevel.Medium || conf == JointConfidenceLevel.High)
@@ -228,7 +213,7 @@ namespace GestureBaseUI_Project
                                 // Debug.WriteLine(pos.X);
                                 bool isFirst = true;
                                 int xref = 0, yref = 0;
-                                int squareSize = 150;
+                                int squareRadious = 150;
                                 
                                 for (int i = 0; i < this.colorHeight * this.colorWidth; i++)
                                 {
@@ -239,7 +224,7 @@ namespace GestureBaseUI_Project
                                         y++;
                                     }
                                     //insede the square
-                                    if ((y - squareSize) < ((int)handpositionGlobal.Y) && (y + squareSize) > ((int)handpositionGlobal.Y) && (x - squareSize) < ((int)handpositionGlobal.X) && (x + squareSize) > ((int)handpositionGlobal.X))
+                                    if ((y - squareRadious) < ((int)HandPositionColor.Y) && (y + squareRadious) > ((int)HandPositionColor.Y) && (x - squareRadious) < ((int)HandPositionColor.X) && (x + squareRadious) > ((int)HandPositionColor.X))
                                     {
                                         if (isFirst)
                                         {
@@ -266,17 +251,17 @@ namespace GestureBaseUI_Project
 
 
                                         //select pixels insede the selected deep
-                                        if (depthPixels[i] < handpositionGlobal.Z + 50 && depthPixels[i] > handpositionGlobal.Z - 150 && depthPixels[i] != 0)
+                                        if (depthPixels[i] < HandPositionColor.Z + 50 && depthPixels[i] > HandPositionColor.Z - 150 && depthPixels[i] != 0)
                                         {
 
-                                            float deep = (((int)depthPixels[i] - ((int)handpositionGlobal.Z - 150)) * 250) / 200;
+                                            float deep = (((int)depthPixels[i] - ((int)HandPositionColor.Z - 150)) * 250) / 200;
                                             //  Debug.WriteLine("deep" + (uint)deep);
                                             uint xs = (uint)((x - xref) / 10);
                                             uint ys = (uint)((y - yref) / 10);
 
-                                            if ((uint)deep > fotoS[ys, xs] || fotoS[ys,xs] == 255)
+                                            if ((uint)deep > actualPhoto[ys, xs] || actualPhoto[ys,xs] == 255)
                                             {
-                                                fotoS[ys, xs] = deep;
+                                                actualPhoto[ys, xs] = deep;
 
                                             }
                                         }
@@ -297,7 +282,7 @@ namespace GestureBaseUI_Project
                            
                             
 
-                            images.Add(fotoS);
+                            images.Add(actualPhoto);
                            // Debug.WriteLine("add from queue");
                             if (images.Count > 10)
                             {
