@@ -37,17 +37,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="model\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="System.Speech">
       <HintPath>..\..\..\..\..\..\..\..\..\Program Files\Reference Assemblies\Microsoft\Framework\v3.0\System.Speech.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="model\gesture_model.pb">
+    <None Update="CNN\Model\gesture_model.pb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -53,32 +53,22 @@ namespace GestureBaseUI_Project.model
 
         private Model model;
 
-        protected List<AState> states_stack = new List<AState>();
-        protected Dictionary<State, AState> m_StateDict = new Dictionary<State, AState>();
+      
+        
 
         private  Vector3 position = new Vector3();
         Prediction pred;
         int tc = 0;
-        public StateManager(AState[] states, Prediction prediction,HandPositionMapper mousecontroller)
+        public StateManager(Prediction prediction, HandPositionMapper mousecontroller)
         {
             pred = prediction;
 
-                        this.mouseController = mousecontroller;
+            this.mouseController = mousecontroller;
 
-            model = new Model(System.IO.Path.Combine(Environment.CurrentDirectory, @"model\gesture_model.pb"));
+            model = new Model(System.IO.Path.Combine(Environment.CurrentDirectory, @"Model\gesture_model.pb"));
 
             // add all states
-            for (int i = 0; i < states.Length; ++i)
-            {
-                states[i].stateManager = this;
-                m_StateDict.Add(states[i].GetStateName(), states[i]);
-
-                // add starting state to stack
-                states_stack.Clear();
-                PushState(states[0].GetStateName());
-            }
         }
-
         float[] p = new float[10];
         bool isFirst = true;
         float speed = 10f;
@@ -308,32 +298,6 @@ namespace GestureBaseUI_Project.model
         }
 
 
-        private void PushState(State s)
-        {
-            AState state;
-            if (!m_StateDict.TryGetValue(s, out state))
-            {
-               // Debug.WriteLine("Can't find the state named " + s);
-                return;
-            }
-
-            //check if there is something in the stack
-            if (states_stack.Count > 0)
-            {
-                // call on exit in actua state
-                states_stack[states_stack.Count - 1].OnExit(state);
-
-                /// call on enter on new state using the old state
-                state.OnEnter(states_stack[states_stack.Count - 1]);
-            }
-            else
-            {
-                // coming from no state
-                state.OnEnter(null);
-            }
-
-            // push new state
-            states_stack.Add(state);
-        }
+      
     }
 }

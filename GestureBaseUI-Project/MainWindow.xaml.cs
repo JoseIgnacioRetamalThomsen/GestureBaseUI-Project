@@ -54,10 +54,7 @@ namespace GestureBaseUI_Project
 
         }
         
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            
-        }
+      
 
     
 

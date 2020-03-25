@@ -28,7 +28,7 @@ namespace GestureBaseUI_Project
 
             this.inputMapper = mousecontroller;
 
-            model = new Model(System.IO.Path.Combine(Environment.CurrentDirectory, @"model\gesture_model.pb"));
+            model = new Model(System.IO.Path.Combine(Environment.CurrentDirectory, @"CNN\Model\gesture_model.pb"));
 
             InitActions();
 

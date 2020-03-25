@@ -45,7 +45,7 @@ namespace GestureBaseUI_Project
            // GetCursorPos(ref point);
            // Debug.WriteLine(point.X + " " + point.Y);
 
-            AState[] states = new AState[] { new MovingState(), new RightDownState()};
+          
 
             Win32Point position = new Win32Point();
             //  GetCursorPos(ref position);
