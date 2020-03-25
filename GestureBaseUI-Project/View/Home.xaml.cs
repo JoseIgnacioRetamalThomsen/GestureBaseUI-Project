@@ -11,9 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Speech.Recognition;
-using System.Windows;
-
-
+using GestureBaseUI_Project.ViewModel;
 
 namespace GestureBaseUI_Project
 {
@@ -22,18 +20,24 @@ namespace GestureBaseUI_Project
     /// </summary>
     public partial class Home : Page
     {
+        /// <summary>
+        /// The View Model
+        /// </summary>
+        private readonly HomeViewModel _viewModel;
         public Home()
         {
             InitializeComponent();
 
-           // box.ItemsSource = Enum.GetValues(typeof(HandGestures));
+            //Create and sets the view model.
+            _viewModel = new HomeViewModel();
+            DataContext = _viewModel;
+            
         }
 
+        #region Navigation
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // View Expense Report
-            PictureRecorder pr = new PictureRecorder();
-            this.NavigationService.Navigate(pr);
+            this.NavigationService.Navigate(new PictureRecorder());
         }
 
         private void Recorder_Button_Click(object sender, RoutedEventArgs e)
@@ -45,5 +49,6 @@ namespace GestureBaseUI_Project
         {
             this.NavigationService.Navigate(new Prediction());
         }
+        #endregion
     }
 }
