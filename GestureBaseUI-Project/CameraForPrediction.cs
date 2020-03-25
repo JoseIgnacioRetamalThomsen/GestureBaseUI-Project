@@ -65,9 +65,9 @@ namespace GestureBaseUI_Project
         /// </summary>
         private bool running = true;
 
-        private StateManager manager;
+        private ActionManager manager;
 
-        public CameraForPrediction(BlockingCollection<float[,]> im, StateManager manager )
+        public CameraForPrediction(BlockingCollection<float[,]> im, ActionManager manager )
         {
             this.manager = manager;
 
@@ -199,15 +199,7 @@ namespace GestureBaseUI_Project
                                 handpositionGlobal.Y = handposition.Value.Y;
                                 // z is the same
                                 handpositionGlobal.Z = pos.Z;
-                                //if(body.GetJoint(JointId.HandTipRight).ConfidenceLevel == JointConfidenceLevel.Low)
-                                //{
-                                //    manager.SetPosition(oldHand);
-                                //}
-                                //else {
-                                //Debug.WriteLine(handpositionGlobal);
-                                
-
-                                // set position for mouse move
+                              
 
                                 if(conf == JointConfidenceLevel.Medium || conf == JointConfidenceLevel.High)
                                     manager.SetPosition(pos);
