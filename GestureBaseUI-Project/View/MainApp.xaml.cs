@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GestureBaseUI_Project.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -18,9 +19,18 @@ namespace GestureBaseUI_Project.View
     /// </summary>
     public partial class MainApp : Page
     {
+        /// <summary>
+        /// The View Model
+        /// </summary>
+        private readonly MainAppViewModel _viewModel;
+
         public MainApp()
         {
             InitializeComponent();
+
+            //Create and sets the view model.
+            _viewModel = new MainAppViewModel();
+            DataContext = _viewModel;
         }
     }
 }

@@ -65,11 +65,11 @@ namespace GestureBaseUI_Project.model
 
             this.mouseController = mousecontroller;
 
-            model = new Model(System.IO.Path.Combine(Environment.CurrentDirectory, @"Model\gesture_model.pb"));
+            model = new Model(System.IO.Path.Combine(Environment.CurrentDirectory, @"Model\gesture_model1.pb"));
 
             // add all states
         }
-        float[] p = new float[10];
+        float[] p = new float[13];
         bool isFirst = true;
         float speed = 10f;
         bool movingRight = false;

@@ -53,7 +53,7 @@ namespace GestureBaseUI_Project
         /// <summary>
         /// Bitmap to display main camera
         /// </summary>
-        private readonly WriteableBitmap bitmapMain = null;
+        private readonly WriteableBitmap bitmapColorCamera = null;
 
         /// <summary>
         /// Bitmap to display crooped camera
@@ -92,7 +92,7 @@ namespace GestureBaseUI_Project
         {
             get
             {
-                return this.bitmapMain;
+                return this.bitmapColorCamera;
             }
         }
         public ImageSource ImageSourceCrop
@@ -113,6 +113,7 @@ namespace GestureBaseUI_Project
         TFGraph graph;
         TFSession session;
         TFSession.Runner runner;
+       
         public Recorder()
         {
             // Open the default device
@@ -132,7 +133,7 @@ namespace GestureBaseUI_Project
             this.colorWidth = this.kinect.GetCalibration().ColorCameraCalibration.ResolutionWidth;
             this.colorHeight = this.kinect.GetCalibration().ColorCameraCalibration.ResolutionHeight;
 
-            this.bitmapMain = new WriteableBitmap(colorWidth, colorHeight, 96.0, 96.0, PixelFormats.Bgra32, null);
+            this.bitmapColorCamera = new WriteableBitmap(colorWidth, colorHeight, 96.0, 96.0, PixelFormats.Bgra32, null);
 
             // this.bitmapCrop =  new Bitmap(300, 300);
 
@@ -213,7 +214,7 @@ namespace GestureBaseUI_Project
 
                         //this.StatusText = "Received Capture: " + capture.Depth.DeviceTimestamp;
 
-                        this.bitmapMain.Lock();
+                        this.bitmapColorCamera.Lock();
 
                         // show normal camera
                         var color = capture.Color;
@@ -271,10 +272,10 @@ namespace GestureBaseUI_Project
                             using (var pin = color.Memory.Pin())
                             {
                                 // put color camera in bitmap
-                                this.bitmapMain.WritePixels(region, (IntPtr)pin.Pointer, (int)color.Size, color.StrideBytes);
+                                this.bitmapColorCamera.WritePixels(region, (IntPtr)pin.Pointer, (int)color.Size, color.StrideBytes);
 
                                 //get pixel from color camera
-                                uint* colorPixels = (uint*)this.bitmapMain.BackBuffer;
+                                uint* colorPixels = (uint*)this.bitmapColorCamera.BackBuffer;
                                 ushort* depthPixels = (ushort*)transformedDepth.Memory.Pin().Pointer;
 
                                 int closest = 501;
@@ -383,8 +384,8 @@ namespace GestureBaseUI_Project
                             }
                         }
 
-                        this.bitmapMain.AddDirtyRect(region);
-                        this.bitmapMain.Unlock();
+                        this.bitmapColorCamera.AddDirtyRect(region);
+                        this.bitmapColorCamera.Unlock();
 
                         this.Crop.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(bm.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 
@@ -424,7 +425,7 @@ namespace GestureBaseUI_Project
         {
 
             using (System.IO.StreamWriter file =
-           new System.IO.StreamWriter(@"C:\Users\Public\gesture\images.txt", true))
+           new System.IO.StreamWriter(@"C:\Users\Public\gesture\images15.txt", true))
             {
                 for (int i = 0; i < 30; i++)
                 {
@@ -439,7 +440,7 @@ namespace GestureBaseUI_Project
             }
 
             using (System.IO.StreamWriter file =
-         new System.IO.StreamWriter(@"C:\Users\Public\gesture\labels.txt", true))
+         new System.IO.StreamWriter(@"C:\Users\Public\gesture\labels15.txt", true))
             {
 
                 file.Write((int)gest);
@@ -512,10 +513,5 @@ namespace GestureBaseUI_Project
 
         }
     }
-    enum HandGestures
-    {
-        // 0    1          2      3        4    5     6     7    8      |9
-       // Move,MoveTumbUp, Click, Scroll, TobmUp, One, Two, Three, Four, Five
-        One, Two, Three, four, Five, Six, Seven, Eight, Nive, Ten
-    }  //mc   mr   ml      mt     mb  c1     c2   c3   c4     
+      
 }

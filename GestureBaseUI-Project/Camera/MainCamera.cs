@@ -74,13 +74,13 @@ namespace GestureBaseUI_Project.Camera
             this.colorHeight = this.kinect.GetCalibration().ColorCameraCalibration.ResolutionHeight;
 
 
-            StartReading();
+            StartCamera();
         }
 
         private const int actualPhotoWidht = 30;
         private const int actualPhotoHeight = 30;
         private const int squareRadious = 150;
-        private async void StartReading()
+        private async void StartCamera()
         {
             //Start body track and sensor camera
             using (Tracker tracker = Tracker.Create(this.kinect.GetCalibration(), new TrackerConfiguration() { ProcessingMode = TrackerProcessingMode.Gpu, SensorOrientation = SensorOrientation.Default }))
@@ -253,6 +253,16 @@ namespace GestureBaseUI_Project.Camera
                 }//while (running)
             }
 
+        }
+
+        public void Close()
+        {
+            running = false;
+
+            if (this.kinect != null)
+            {
+                this.kinect.Dispose();
+            }
         }
     }
 }

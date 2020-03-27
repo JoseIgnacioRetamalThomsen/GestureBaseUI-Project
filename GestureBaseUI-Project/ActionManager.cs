@@ -22,16 +22,37 @@ namespace GestureBaseUI_Project
         Dictionary<string, Action> actions;
 
         private ActionCounter counter = new ActionCounter();
-        public ActionManager(Prediction mainpage, HandPositionMapper mousecontroller)
+        public ActionManager(HandPositionMapper mousecontroller)
         {
-            _mainPage = mainpage;
+
 
             this.inputMapper = mousecontroller;
 
-            model = new Model(System.IO.Path.Combine(Environment.CurrentDirectory, @"CNN\Model\gesture_model.pb"));
+            model = new Model(System.IO.Path.Combine(Environment.CurrentDirectory, @"CNN\Model\gesture_model1.pb"));
 
             InitActions();
 
+        }
+
+        int actual = 5;
+        public void update(int next)
+        {
+            if(actual == 5)
+            {
+                if(next == 0)
+                {
+                    actual = 0;
+                }
+            }else
+                if(actual == 0)
+            {
+                if(next == 5)
+                {
+                    actual = 5;
+                }
+            }
+
+            this.actions[actual.ToString()]?.Invoke();
         }
 
         private void InitActions()
@@ -42,13 +63,17 @@ namespace GestureBaseUI_Project
             this.actions.Add("2", Moving);
             this.actions.Add("3", Moving);
             this.actions.Add("4", Moving);
-            this.actions.Add("5", Click);
+            this.actions.Add("5", Ready);
             this.actions.Add("6", DoubleClick);
             this.actions.Add("7", FullHand);
             this.actions.Add("8", ScrollDown);
             this.actions.Add("9", ScrollUp);
         }
 
+        private void Ready()
+        {
+            Debug.WriteLine("ready");
+        }
 
         private void Moving()
         {
@@ -102,9 +127,9 @@ namespace GestureBaseUI_Project
         {
             if (hasChange) return;
             Debug.WriteLine("Full nand.");
-          var temp =  MouseController.Instance.NextWindows();
+            var temp = MouseController.Instance.NextWindows();
             hasChange = true;
-            Debug.WriteLine("Full hand. " + temp );
+            Debug.WriteLine("Full hand. " + temp);
         }
 
         private void DoubleClick()
@@ -134,7 +159,7 @@ namespace GestureBaseUI_Project
 
             var prediction = model.Predict(imageLast);
 
-            float[] prediction1d = new float[10];
+            float[] prediction1d = new float[13];
             int i1 = 0;
             foreach (float f in prediction)
             {
@@ -143,11 +168,12 @@ namespace GestureBaseUI_Project
 
             float max = prediction1d.Max();
             int m = Array.IndexOf(prediction1d, max);
-           
-            int next = counter.Count(m);
-          //  Debug.WriteLine("m : " + m + " a : " + next);
-            this.actions[next.ToString()]?.Invoke();
 
+            int next = counter.Count(m);
+            Debug.WriteLine("m : " + m + " a :" + next);
+
+            //this.actions["0"]?.Invoke();
+            update(next);
         }
 
         private Win32Point lastPoint = new Win32Point();
@@ -177,52 +203,48 @@ namespace GestureBaseUI_Project
     }
 
 
-    class ActionCounter
+    public class ActionCounter
     {
-        private int[] MIN_FOR_CHANGE = { 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3 };
-        private int[] count = new int[10];
+        private int[] MIN_FOR_CHANGE = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 };
+        private int[] count = new int[13];
         private int last = 0;
         private int actual = 0;
 
 
+        public ActionCounter()
+        {
+
+        }
+        public ActionCounter(int start)
+        {
+            actual = start;
+        }
+
         public int Count(int value)
         {
-           
-            //keep the same
-            if (actual == value)
+            // no change
+            if(value == actual)
             {
-                return actual;
-            }
-            else if (last == value)
+                
+            }else
+            if(value != last)
             {
+                count[last] = 0;
                 count[value]++;
-                ///means we change
-                if (count[value]>= MIN_FOR_CHANGE[value])
-                {
-                    count[value] = 0;
-                    actual = value;
-                    return value;
-                }
-                else
-                {
-                    return actual;
-                }
+                last = value;
+                
             }
             else
             {
-                last = value;
                 count[value]++;
-                if (count[value] >= MIN_FOR_CHANGE[value])
+                if(count[value]>= MIN_FOR_CHANGE[value])
                 {
-                    count[value] = 0;
                     actual = value;
-                    return value;
-                }
-                else
-                {
-                    return actual;
                 }
             }
+            return actual;
+          
+            
         }
     }
 }

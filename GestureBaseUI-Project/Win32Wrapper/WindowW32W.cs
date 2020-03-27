@@ -63,6 +63,7 @@ namespace GestureBaseUI_Project.Win32Wrapper
             GW_ENABLEDPOPUP = 6
         }
 
+        //https://docs.microsoft.com/en-us/windows/win32/api/windef/ns-windef-rect
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
         {

@@ -10,18 +10,32 @@ namespace GestureBaseUI_Project
 {
     public class HandPositionMapper
     {
-        private Rectangle screen;
-        private Rectangle moveArea;
+        /// <summary>
+        /// The screen area
+        /// </summary>
+        private MyRect screen;
 
+        /// <summary>
+        /// The hand area
+        /// </summary>
+        private MyRect moveArea;
+
+                /// <summary>
+        /// x constant for scalate from move area to screen area.
+        /// </summary>
         private float relationX; 
+
+        /// <summary>
+        /// y constant for scalere from move area to screen area.
+        /// </summary>
         private float relationY; 
-        public HandPositionMapper(Rectangle screen, Rectangle moveArea)
+        public HandPositionMapper(MyRect screen, MyRect moveArea)
         {
             this.screen = screen;
             this.moveArea = moveArea;
 
             relationX = screen.Width / moveArea.Width;
-            relationY = screen.Heigth / moveArea.Heigth;
+            relationY = screen.Height / moveArea.Height;
         }
 
         private int width, heigth;
@@ -85,6 +99,16 @@ namespace GestureBaseUI_Project
         private Win32Point last = new Win32Point { 
         X=0,Y=0};
         bool f = true;
+
+
+        public Win32Point getNextPosition1(Vector2 newHandPosition)
+        {
+            Vector2  t= screen.Center + (newHandPosition - moveArea.Center) * 2;
+            return new Win32Point() { 
+            X= (int)t.X,Y=(int)t.Y};
+        }
+
+
         public Win32Point getNextPosition(Vector2 newHandPosition)
         {
             if(Math.Abs(oldHandPosition.Y- newHandPosition.Y) >500 || Math.Abs(oldHandPosition.X - newHandPosition.X) > 500
@@ -105,12 +129,10 @@ namespace GestureBaseUI_Project
            
             float xs = xh * relationX*(0.9F) - 0.1F;
 
-            float yh =   +moveArea.TopLeft.Y +newHandPosition.Y;
-            //float yh =  newHandPosition.Y -200;
+            float yh =   +moveArea.Left +newHandPosition.Y;
+         
             float ys = yh * relationY*(0.9F) -0.1F;
-           //Debug.WriteLine("x position: " + newHandPosition.X + " " + xh + " " + xs);
-            //              Debug.WriteLine("y position: " + newHandPosition.Y + " " + yh + " " + ys);
-
+        
             oldHandPosition = newHandPosition;
             last.X = (int)xs;
             last.Y = (int)ys;

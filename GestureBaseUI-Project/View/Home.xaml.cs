@@ -44,8 +44,12 @@ namespace GestureBaseUI_Project
         {
             this.NavigationService.Navigate(new MainApp());
         }
+
         #endregion
 
-
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new DataCollectionView());
+        }
     }
 }

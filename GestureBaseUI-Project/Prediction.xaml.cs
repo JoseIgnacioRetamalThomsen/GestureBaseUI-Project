@@ -50,18 +50,19 @@ namespace GestureBaseUI_Project
             Win32Point position = new Win32Point();
             //  GetCursorPos(ref position);
 
-            Rectangle screen = new Rectangle(new Win32Point(0, 0), 
-                                            new Win32Point((int)System.Windows.SystemParameters.PrimaryScreenWidth,
-                                                            (int)System.Windows.SystemParameters.PrimaryScreenHeight));
+            MyRect screen = new MyRect(
+                0, 
+                0, 
+                (float)System.Windows.SystemParameters.PrimaryScreenWidth,
+                (float)System.Windows.SystemParameters.PrimaryScreenHeight);
 
-            Rectangle moveArea = new Rectangle(new Win32Point(100,250), new Win32Point(-300, 50));
 
-            HandPositionMapper mc = new HandPositionMapper(
-                screen,
-                moveArea
-                );
-             // manager  = new StateManager(states,this, mc);
-            am = new ActionManager(this, mc);
+
+            MyRect moveArea = new MyRect(100,250, -300, 50);
+
+            HandPositionMapper mc = new HandPositionMapper(screen,moveArea);
+            
+            am = new ActionManager( mc);
             //  Info.Content = manager.StatusText;
 
             //  new Thread(() =>
