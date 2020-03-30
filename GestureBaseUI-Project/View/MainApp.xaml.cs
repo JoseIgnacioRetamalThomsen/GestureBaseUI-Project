@@ -1,6 +1,8 @@
-﻿using GestureBaseUI_Project.ViewModel;
+﻿using GestureBaseUI_Project.Models;
+using GestureBaseUI_Project.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,6 +33,15 @@ namespace GestureBaseUI_Project.View
             //Create and sets the view model.
             _viewModel = new MainAppViewModel();
             DataContext = _viewModel;
+
+            LinksView.ItemsSource = _viewModel.Links;
+        }
+     
+        private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Debug.WriteLine("here" + ((ProcessLink)((ListViewItem)sender).DataContext).Windows) ;
+            WindowController.Instance.OpenWindow(((ProcessLink)((ListViewItem)sender).DataContext).Windows);
+
         }
     }
 }

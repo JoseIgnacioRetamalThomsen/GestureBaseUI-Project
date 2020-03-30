@@ -67,8 +67,7 @@ namespace GestureBaseUI_Project.ViewModel
                 return _numberOfPhotos.ToString();
             }
             set
-            {
-                Debug.WriteLine("Called2");
+            {              
                 SetValue(ref _numberOfPhotos, Int32.Parse(value));
             }
         }
@@ -104,10 +103,7 @@ namespace GestureBaseUI_Project.ViewModel
             get
             {
                 return new DelegateCommand(() =>
-                {
-                    // Your code here.
-                    // You may want to terminate the running thread etc.
-                    Debug.WriteLine("working");
+                {                   
                     cam.StartRecording(_numberOfPhotos, _selectedHandGesture);
                     Thread t = new Thread(new ThreadStart(cam.Take));
                     t.Start();
@@ -136,16 +132,13 @@ namespace GestureBaseUI_Project.ViewModel
             //get images
             DirectoryInfo di = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, @"Images/HandGestureIcons"));
             Images = di.GetFiles("*.png");
+         
             //set image
             SetGestureImage(0);
 
 
             cam = new DataCollectionCamera(ref bitmapColorCamera, this);
 
-            
-
         }
-
-
     }
 }

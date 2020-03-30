@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using GestureBaseUI_Project.MouseControl;
+using GestureBaseUI_Project;
 
 namespace GestureBaseUI_Project.Win32Wrapper
 {
     /// <summary>
     /// Provide acces to win32 api for controlling mouse actions
+    ///    
+    ///  Use of external mouse function for control the mouse.
+    /// 
+    ///  https://www.elitepvpers.com/forum/net-languages/118712-c-windows-api.html 
+    /// 
+    ///  https://stackoverflow.com/questions/8739523/directing-mouse-events-dllimportuser32-dll-click-double-click
+    ///
     /// </summary>
     public sealed class MouseW32W
     {

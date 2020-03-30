@@ -1,23 +1,11 @@
 ﻿using GestureBaseUI_Project.model;
-using GestureBaseUI_Project.MouseControl;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Rectangle = GestureBaseUI_Project.MouseControl.Rectangle;
 
 namespace GestureBaseUI_Project
 {
@@ -36,16 +24,15 @@ namespace GestureBaseUI_Project
             InitializeComponent();
 
             MouseController.Instance.ScrolUp(1);
-            Bitmap bm = MouseController.CreateScreenshot();
-            Crop.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(bm.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+          
+           // Crop.Source = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(bm.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 
             //Debug.WriteLine(System.Windows.SystemParameters.PrimaryScreenWidth  +"  "+System.Windows.SystemParameters.PrimaryScreenHeight);
 
             Win32Point point = new Win32Point();
            // GetCursorPos(ref point);
            // Debug.WriteLine(point.X + " " + point.Y);
-
-          
+                     
 
             Win32Point position = new Win32Point();
             //  GetCursorPos(ref position);
@@ -62,7 +49,7 @@ namespace GestureBaseUI_Project
 
             HandPositionMapper mc = new HandPositionMapper(screen,moveArea);
             
-            am = new ActionManager( mc);
+           // am = new ActionManager( mc, new System.Collections.ObjectModel.ObservableCollection<Models.ProcessLink>());
             //  Info.Content = manager.StatusText;
 
             //  new Thread(() =>

@@ -1,14 +1,7 @@
-﻿using GestureBaseUI_Project.MouseControl;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Windows.Controls;
-using System.Windows.Media;
-using static GestureBaseUI_Project.Prediction;
 
 namespace GestureBaseUI_Project.model
 {
@@ -79,6 +72,7 @@ namespace GestureBaseUI_Project.model
         bool isFirstPosition = true;
         Vector3 MousePosition = Vector3.Zero;
         HandPositionMapper mc;
+
         public void SetPosition(Vector3 newpos)
         {
             Win32Point temp = mouseController.getNextPosition(new Vector2(newpos.X, newpos.Y));
@@ -209,7 +203,7 @@ namespace GestureBaseUI_Project.model
             return actualState;
         }
 
-
+        /*
         public void AddImage(float[,] image)
         {
 
@@ -294,10 +288,10 @@ namespace GestureBaseUI_Project.model
                 Debug.Write(f + " ");
             }
             Debug.WriteLine("");
-            */
+            
         }
 
-
+    */
       
     }
 }

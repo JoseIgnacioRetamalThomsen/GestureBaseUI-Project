@@ -1,0 +1,46 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:GestureBaseUI_Project"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+    <system:String x:Key="infoall">Try to do it now! If you do it right, the circle will become green, do it right twice, and you will go to the next step. Alternatively, you can click on the right button to go to the next gesture.</system:String>
+    <system:String x:Key="title1">Ready Gesture</system:String>
+    <system:String x:Key="body1">A  fully open hand must precede all other gestures. For example, for starting moving the cursor, you first do full open hand and then point to the screen.</system:String>
+    <system:String x:Key="title2">Mouse control gesture</system:String>
+    <system:String x:Key="body2">Point to the camera for using the mouse.</system:String>
+    
+    <system:String x:Key="title3">Click</system:String>
+    <system:String x:Key="body3">For click, make a one with your index finger.</system:String>
+
+    <system:String x:Key="title4">Double click</system:String>
+    <system:String x:Key="body4">Make the number 2 with your fingers for double click.</system:String>
+
+    <system:String x:Key="title5">Shortcut Three</system:String>
+    <system:String x:Key="body5">Use the number 3 to open your selected program. You can set shortcuts in settings.</system:String>
+
+    <system:String x:Key="title6">Shortcut Four</system:String>
+    <system:String x:Key="body6">Make the number 4 with your finger for your selected shortcut.</system:String>
+
+    <system:String x:Key="title7">Wave Down</system:String>
+    <system:String x:Key="body7">Wave down for scroll down.  You should move your hand to the position and keep it there, no need to go up and down. You can set scroll speed in settings.</system:String>
+
+    <system:String x:Key="title8">Wave Up</system:String>
+    <system:String x:Key="body8">Wave up for scroll up.  You should move your hand to the position and keep it there, no need to go up and down. You can set scroll speed in settings.</system:String>
+
+    <system:String x:Key="title9">Wave Left</system:String>
+    <system:String x:Key="body9">Will change the active window to the program on the left on the toolbar. You should move your hand to the position and keep it there, no need to go up and down. You can set scroll speed in settings.</system:String>
+
+    <system:String x:Key="title10">Wave Right</system:String>
+    <system:String x:Key="body10">Will change the active window to the program on the right on the toolbar. You should move your hand to the position and keep it there, no need to go up and down. You can set scroll speed in settings.</system:String>
+
+    <system:String x:Key="title11">Gesture</system:String>
+    <system:String x:Key="body11">Make the gesture on the figure for your third shortcut.</system:String>
+
+    <system:String x:Key="title12">Gesture</system:String>
+    <system:String x:Key="body12">Make the gesture on the figure for your shortcut.</system:String>
+
+
+    <system:String x:Key="title13">Close Hand</system:String>
+    <system:String x:Key="body13">Close the hand to get back to the program interface.</system:String>
+
+</ResourceDictionary>

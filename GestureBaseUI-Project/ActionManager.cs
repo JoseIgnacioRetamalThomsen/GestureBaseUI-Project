@@ -1,179 +1,223 @@
-﻿using GestureBaseUI_Project.MouseControl;
+﻿using GalaSoft.MvvmLight.Messaging;
+using GestureBaseUI_Project.Models;
+using GestureBaseUI_Project.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using System.Text;
+using System.Threading;
 
 namespace GestureBaseUI_Project
 {
     public class ActionManager
     {
-        int[] count = new int[10];
-
-        private float[] prediction = new float[10];
-
-        private Model model;
-
-        private Prediction _mainPage;
+        /// <summary>
+        /// Model for predicition.
+        /// </summary>
+        private readonly Model model;
+               
+        /// <summary>
+        /// Maps the hand position to mouse in the screen.
+        /// </summary>
         private HandPositionMapper inputMapper;
 
+        /// <summary>
+        /// Map actions.
+        /// </summary>
         Dictionary<string, Action> actions;
 
-        private ActionCounter counter = new ActionCounter();
-        public ActionManager(HandPositionMapper mousecontroller)
+        /// <summary>
+        /// Counts predictions for decide when to change
+        /// </summary>
+        private readonly ActionCounter counter = new ActionCounter();
+
+        MainAppViewModel _viewModel;
+        public ActionManager(HandPositionMapper mousecontroller, MainAppViewModel vm)
         {
 
-
+            _viewModel = vm;
             this.inputMapper = mousecontroller;
 
             model = new Model(System.IO.Path.Combine(Environment.CurrentDirectory, @"CNN\Model\gesture_model1.pb"));
 
             InitActions();
-
+            
         }
 
         int actual = 5;
-        public void update(int next)
+        bool ready = false;
+        bool moving = false;
+
+        public void Update(int next)
         {
-            if(actual == 5)
+
+            if (ready)
             {
-                if(next == 0)
+
+                if (next == 5) return;
+                ready = false;
+                actual = next;
+                this.actions[actual.ToString()]?.Invoke();
+            }
+            else
+            {
+                if (next == 5)
                 {
-                    actual = 0;
+                    ready = true;
+                    Debug.WriteLine("Ready");
+                    //Thread.Sleep(500);
                 }
-            }else
-                if(actual == 0)
-            {
-                if(next == 5)
+                else if (actual == 0)
                 {
-                    actual = 5;
+                    Moving();
+                }
+                else if (actual == 6)
+                {
+                    WaveDown();
+                }
+                else if (actual == 7)
+                {
+                    Waveup();
                 }
             }
 
-            this.actions[actual.ToString()]?.Invoke();
+
         }
 
         private void InitActions()
         {
             this.actions = new Dictionary<string, Action>();
             this.actions.Add("0", Moving);
-            this.actions.Add("1", Moving);
-            this.actions.Add("2", Moving);
-            this.actions.Add("3", Moving);
-            this.actions.Add("4", Moving);
+            this.actions.Add("1", One);
+            this.actions.Add("2", Two);
+            this.actions.Add("3", Three);
+            this.actions.Add("4", Four);
             this.actions.Add("5", Ready);
-            this.actions.Add("6", DoubleClick);
-            this.actions.Add("7", FullHand);
-            this.actions.Add("8", ScrollDown);
-            this.actions.Add("9", ScrollUp);
+            this.actions.Add("6", WaveDown);
+            this.actions.Add("7", Waveup);
+            this.actions.Add("8", WaveLeft);
+            this.actions.Add("9", WaveRigth);
+            this.actions.Add("10", Surf);
+            this.actions.Add("11", Cow);
+            this.actions.Add("12", Close);
+
+        }
+
+
+
+        private void Moving()
+        {
+            Debug.WriteLine("moving");
+            MouseController.Instance.SetPosition(lastPoint.X, lastPoint.Y);
+        }
+
+        private void One()
+        {
+            Debug.WriteLine("click");
+            MouseController.Instance.Click();
+            ready = false;
+        }
+
+        private void Two()
+        {
+            Debug.WriteLine("Two");
+            ready = false;
+
+        }
+        private void Three()
+        {
+
+            //C:\Users\pepe\eclipse\java-2019-09\eclipse\eclipse.exe
+            Debug.WriteLine("Three");
+            Process.Start("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe");
+
+            AskUpdate();
+            ready = false;
+        }
+        private void Four()
+        {
+            Debug.WriteLine("four");
         }
 
         private void Ready()
         {
-            Debug.WriteLine("ready");
+            Debug.WriteLine("Ready");
         }
 
-        private void Moving()
+        private void WaveDown()
         {
-            count[0]++;
-            if (count[0] > 2) ResetAllCount();
-            MouseController.Instance.SetPosition(lastPoint.X, lastPoint.Y);
-            hasClick = false;
+            MouseController.Instance.ScrolDown(40);
+            Debug.WriteLine("WaveDown");
+
         }
-
-
-        private void Click()
+        private void Waveup()
         {
-            MouseController.Instance.Click();
-            Debug.WriteLine("Clickkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
-            return;
-            if (count[5] == 0)
+            MouseController.Instance.ScrolUp(40);
+            Debug.WriteLine("Wave up");
+
+        }
+        private void WaveLeft()
+        {
+            IntPtr wp = WindowController.Instance.GetActiveWindow();
+
+            Debug.WriteLine("count " + _viewModel.Links.Count);
+
+            int position = 0;
+            for (int i = 0; i < _viewModel.Links.Count; i++)
             {
-                count[5]++;
-            }
-            else
-              if (count[5] > 0 && !hasClick)
-            {
-                MouseController.Instance.Click();
-                Debug.WriteLine("Clickkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
-                count[5] = 0;
-                hasClick = true;
-            }
-        }
-
-        private void ScrollUp()
-        {
-            MouseController.Instance.ScrolUp(20);
-            return;
-            count[9]++;
-            if (count[9] > 1)
-            {
-                MouseController.Instance.ScrolUp(20);
-                this.actualState = 9;
-            }
-        }
-
-
-
-        private void ScrollDown()
-        {
-            MouseController.Instance.ScrolDown(20);
-            return;
-        }
-        bool hasChange = false;
-        private void FullHand()
-        {
-            if (hasChange) return;
-            Debug.WriteLine("Full nand.");
-            var temp = MouseController.Instance.NextWindows();
-            hasChange = true;
-            Debug.WriteLine("Full hand. " + temp);
-        }
-
-        private void DoubleClick()
-        {
-            Debug.WriteLine("Double click");
-            // throw new NotImplementedException();
-            hasChange = false;
-        }
-
-
-
-
-        int actualState = 0;
-        bool hasClick = false;
-        public void AddImage(float[,] image)
-        {
-
-            float[] imageLast = new float[900];
-            int ii = 0;
-            for (int i = 0; i < 30; i++)
-            {
-                for (int j = 0; j < 30; j++)
+                if (_viewModel.Links[i].Windows == wp)
                 {
-                    imageLast[ii++] = image[i, j];
+                    position = i;
+                    break;
                 }
             }
+            int nextPosition = (position + 1) % _viewModel.Links.Count;
+            IntPtr nextP = _viewModel.Links[nextPosition].Windows;
+            WindowController.Instance.SetActiveWindows(nextP);
+            Debug.WriteLine("waveLeft");
+        }
+        private void WaveRigth()
+        {
 
-            var prediction = model.Predict(imageLast);
+            IntPtr wp = WindowController.Instance.GetActiveWindow();
 
-            float[] prediction1d = new float[13];
-            int i1 = 0;
-            foreach (float f in prediction)
+            Debug.WriteLine("count " + _viewModel.Links.Count);
+
+            int position = 0;
+            for (int i = 0; i < _viewModel.Links.Count; i++)
             {
-                prediction1d[i1++] = f;
+                if (_viewModel.Links[i].Windows == wp)
+                {
+                    position = i;
+                    break;
+                }
             }
+            int nextPosition = (position + 1 + _viewModel.Links.Count) % _viewModel.Links.Count;
+            IntPtr nextP = _viewModel.Links[nextPosition].Windows;
+            WindowController.Instance.SetActiveWindows(nextP);
+            Debug.WriteLine("WaveRight");
+        }
+        private void Surf()
+        {
+            Debug.WriteLine("surf");
+        }
+        private void Cow()
+        {
+            Debug.WriteLine("cow");
+        }
+        private void Close()
+        {
+            Debug.WriteLine("Close");
+        }
 
-            float max = prediction1d.Max();
-            int m = Array.IndexOf(prediction1d, max);
 
-            int next = counter.Count(m);
-            Debug.WriteLine("m : " + m + " a :" + next);
+        bool hasChange = false;
 
-            //this.actions["0"]?.Invoke();
-            update(next);
+        public void AddImage(float[,] image)
+        {
+            Update(counter.Count(model.Predict(image)));
         }
 
         private Win32Point lastPoint = new Win32Point();
@@ -182,24 +226,23 @@ namespace GestureBaseUI_Project
             Win32Point temp = inputMapper.getNextPosition(new Vector2(newpos.X, newpos.Y));
             //pred.SetPointPosition(1920, 1200);
             //  pred.SetPointPosition(temp);
-            //MouseController.Instance.SetPosition(temp.X, temp.Y);
+            // MouseController.Instance.SetPosition(temp.X, temp.Y);
             lastPoint = temp;
 
             return;
         }
 
 
-        private void ResetAllCount()
+        public void AskUpdate()
         {
-            count = new int[10];
-        }
-        public void PrintCount()
-        {
-            foreach (int i in count)
+            var update = new UpdateListRequest()
             {
-                Debug.WriteLine(i);
-            }
+                Update = true
+            };
+            Messenger.Default.Send(update);
         }
+
+
     }
 
 
@@ -213,38 +256,54 @@ namespace GestureBaseUI_Project
 
         public ActionCounter()
         {
-
+            setAllMin(10);
         }
         public ActionCounter(int start)
         {
             actual = start;
+
+        }
+
+        private void setAllMin(int value)
+        {
+            for (int i = 0; i < MIN_FOR_CHANGE.Length; i++)
+            {
+                MIN_FOR_CHANGE[i] = value;
+            }
+        }
+        public void SetAction(int num)
+        {
+            count[actual] = 0;
+            actual = num;
+            last = num;
         }
 
         public int Count(int value)
         {
             // no change
-            if(value == actual)
+            if (value == actual)
             {
-                
-            }else
-            if(value != last)
+
+            }
+            else
+            if (value != last)
             {
                 count[last] = 0;
                 count[value]++;
                 last = value;
-                
+
             }
             else
             {
                 count[value]++;
-                if(count[value]>= MIN_FOR_CHANGE[value])
+                if (count[value] >= MIN_FOR_CHANGE[value])
                 {
                     actual = value;
                 }
             }
             return actual;
-          
-            
+
+
         }
     }
 }

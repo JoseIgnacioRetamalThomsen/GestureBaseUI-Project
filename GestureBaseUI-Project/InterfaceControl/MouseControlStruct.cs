@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Text;
 
-namespace GestureBaseUI_Project.MouseControl
+
+namespace GestureBaseUI_Project
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct Win32Point

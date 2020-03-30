@@ -19,8 +19,43 @@
                     <RowDefinition Height="5*"/>
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                            
-           
+
+                <StackPanel  x:Name="Links" Grid.Row="1" >
+
+
+
+                    <ListView
+                              x:Name="LinksView" 
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Top">
+
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="5" HorizontalAlignment="Stretch"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_PreviewMouseLeftButtonDown"  />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                               
+                                    <StackPanel  Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+
+                                        <Image  Source="{Binding ImageData}" Width="100" HorizontalAlignment="Stretch" VerticalAlignment="Top" Stretch="UniformToFill" />
+
+                                        <TextBlock Text="{Binding Title}" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+
+                                    </StackPanel>
+                                
+                          
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+
             </Grid>
         </Border>
 

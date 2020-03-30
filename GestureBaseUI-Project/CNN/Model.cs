@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using TensorFlow;
 
@@ -37,8 +38,9 @@ namespace GestureBaseUI_Project
         /// </summary>
         /// <param name="image">the input image</param>
         /// <returns></returns>
-        public float[,] Predict(float[] image)
+        public int Predict(float[,] im)
         {
+            float[] image = TransformArray(im);
             //create a runner with the session
             var runner = _session.GetRunner();
 
@@ -61,7 +63,33 @@ namespace GestureBaseUI_Project
             var resultArray = result.GetValue() as float[,];
 
             //return 
-            return resultArray;
+            return ExtractPrediction(resultArray);
+        }
+
+        private float[] TransformArray(float[,] image)
+        {
+            float[] imageLast = new float[900];
+            int ii = 0;
+            for (int i = 0; i < 30; i++)
+            {
+                for (int j = 0; j < 30; j++)
+                {
+                    imageLast[ii++] = image[i, j];
+                }
+            }
+            return imageLast;
+        }
+
+        private int ExtractPrediction(float[,] resultArray)
+        {
+            float[] prediction1d = new float[13];
+            int i1 = 0;
+            foreach (float f in resultArray)
+            {
+                prediction1d[i1++] = f;
+            }
+            float max = prediction1d.Max();
+            return Array.IndexOf(prediction1d, max);
         }
 
         public void CreateTenso()

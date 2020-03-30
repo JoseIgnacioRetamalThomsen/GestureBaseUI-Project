@@ -1,10 +1,7 @@
-﻿using GestureBaseUI_Project.MouseControl;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.Numerics;
-using System.Text;
-using static GestureBaseUI_Project.Prediction;
+
 
 namespace GestureBaseUI_Project
 {
@@ -13,7 +10,7 @@ namespace GestureBaseUI_Project
         /// <summary>
         /// The screen area
         /// </summary>
-        private MyRect screen;
+        private MyRect screen; 
 
         /// <summary>
         /// The hand area
@@ -124,15 +121,13 @@ namespace GestureBaseUI_Project
                 return last;
             }
 
-            //  float xh = 600 - newHandPosition.X;  -moveArea.TopLeft.X 
-            float xh = 200-newHandPosition.X;
            
-            float xs = xh * relationX*(0.9F) - 0.1F;
-
-            float yh =   +moveArea.Left +newHandPosition.Y;
+            float xh = -(moveArea.Left+newHandPosition.X);
+            float yh =   -(moveArea.Top -newHandPosition.Y);
          
             float ys = yh * relationY*(0.9F) -0.1F;
-        
+            float xs = xh * relationX * (0.9F) - 0.1F;
+
             oldHandPosition = newHandPosition;
             last.X = (int)xs;
             last.Y = (int)ys;

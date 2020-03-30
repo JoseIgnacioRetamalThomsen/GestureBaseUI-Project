@@ -29,7 +29,7 @@
 
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Margin="10,10,10,10" Foreground="White" FontSize="52" Style="{DynamicResource FontType}">My Windows Interface Control</TextBlock>
-                        <Button Grid.Column="1"  Margin="10,10,10,10"   Click="Button_Click" Width="52" Height="52" FontSize="38" HorizontalAlignment="Right" Style="{DynamicResource ButtonStyle}">?</Button>
+                        <Button Grid.Column="1"  Margin="10,10,10,10"   Click="Tutorial_Click" Width="52" Height="52" FontSize="38" HorizontalAlignment="Right" Style="{DynamicResource ButtonStyle}">?</Button>
 
                     </Grid>
 
@@ -48,7 +48,7 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Background="#1D3442">
-                    <Button  Margin="10,10,10,10"   Click="Button_Click" Style="{DynamicResource ButtonStyle}">View</Button>
+                    <Button  Margin="10,10,10,10"   Click="Tutorial_Click" Style="{DynamicResource ButtonStyle}">Tutorial</Button>
                     <Button Margin="10,10,10,10"   Click="Recorder_Button_Click" Style="{DynamicResource ButtonStyle}">Record Iamges For train</Button>
                     <Button  Margin="10,10,10,10"  Click="Button_Click_1" Style="{DynamicResource ButtonStyle}">Prediction</Button>
                     <Button  Margin="10,10,10,10"  Click="Button_Click_2"  Style="{DynamicResource ButtonStyle}">Main App</Button>

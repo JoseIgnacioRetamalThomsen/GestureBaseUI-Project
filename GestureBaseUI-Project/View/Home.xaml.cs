@@ -25,9 +25,9 @@ namespace GestureBaseUI_Project
         }
 
         #region Navigation
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Tutorial_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new PictureRecorder());
+            this.NavigationService.Navigate(new TutorialView());
         }
 
         private void Recorder_Button_Click(object sender, RoutedEventArgs e)

@@ -1,10 +1,10 @@
-﻿using GestureBaseUI_Project.Camera;
-using GestureBaseUI_Project.MouseControl;
+﻿using GalaSoft.MvvmLight.Messaging;
+using GestureBaseUI_Project.Camera;
+using GestureBaseUI_Project.Models;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,6 +12,9 @@ namespace GestureBaseUI_Project.ViewModel
 {
     public class MainAppViewModel : BaseViewModel
     {
+        
+        public ObservableCollection<ProcessLink> Links { get; set; }
+
         /// <summary>
         /// Queue for output images, images are just represent as an array of floats.
         /// </summary>
@@ -26,14 +29,17 @@ namespace GestureBaseUI_Project.ViewModel
 
         private ActionManager actionManager;
 
-        private HandPositionMapper inputMapper;
+       
 
 
         public MainAppViewModel()
         {
+   
             this.images = new BlockingCollection<float[,]>() ;
             this.bodyData = new BlockingCollection<BodyData>() ;
 
+            Links = new ObservableCollection<ProcessLink>();
+            LoadLinks();
 
             MyRect screen = new MyRect(
                 0,
@@ -43,12 +49,14 @@ namespace GestureBaseUI_Project.ViewModel
 
 
 
-            MyRect moveArea = new MyRect(100, 250, -300, 50);
+            MyRect moveArea = new MyRect(250, -50, 450,100);
 
             HandPositionMapper mc = new HandPositionMapper(screen, moveArea);
-            actionManager = new ActionManager(mc);
+            actionManager = new ActionManager(mc, this);
 
             Task.Factory.StartNew(() => { MainCamera predictor = new MainCamera(images,bodyData);});
+
+
 
             new Thread(() =>
             {
@@ -60,15 +68,35 @@ namespace GestureBaseUI_Project.ViewModel
                     actionManager.SetPosition(bodyData.Take().HandPosition);
 
                     actionManager.AddImage(im);
-
-                   
-                 
-
-
+              
                 }
             }).Start();
 
 
+            Messenger.Default.Register<UpdateListRequest>(
+                this,
+                UpdateList);
+
         }
+
+        private void UpdateList(UpdateListRequest obj)
+        {
+            LoadLinks();
+        }
+
+        public void LoadLinks()
+        {
+            /*
+            Links.Clear();
+            foreach(var i in WindowController.Instance.GetAllActiveWindows())
+            {
+                Links.Add(i);
+            }*/
+            
+            Links = new ObservableCollection<ProcessLink>(WindowController.Instance.GetAllActiveWindows());
+     
+        }
+
+
     }
 }
