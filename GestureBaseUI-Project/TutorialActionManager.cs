@@ -45,15 +45,15 @@ namespace GestureBaseUI_Project
         public void MakeReady()
         {
             this.isReady = true;
-            Debug.WriteLine("isred");
+         
         }
 
         private void Update(int v)
         {
-            Debug.WriteLine(isReady);
+         
             if (this.isReady)
             {
-                Debug.WriteLine(v);
+              
                 if (_viewModel.PageNumber == 0)
                 {
                     if (v == 5)

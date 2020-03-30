@@ -26,6 +26,8 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
+                <Button Click="Button_Click" Content="Back" Width="50" Height="30" Style="{DynamicResource ButtonStyle}"/> 
+
                 <StackPanel Grid.Column="1">
                 <TextBlock  TextAlignment="Center" Text="{Binding Title}" Style="{DynamicResource TutorialTitle}"/>
                     <Separator />

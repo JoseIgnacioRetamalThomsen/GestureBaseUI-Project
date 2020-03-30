@@ -19,6 +19,17 @@ namespace GestureBaseUI_Project.ViewModel
 {
     public class TutorialViewModel : BaseViewModel
     {
+
+        /// <summary>
+        /// Manage the action of the tutorial, read the inputs.
+        /// </summary>
+        private readonly TutorialActionManager am;
+
+        /// <summary>
+        /// Runs the camera for get imagess.
+        /// </summary>
+        private MainCamera predictor;
+
         /// <summary>
         /// Queue for output images, images are just represent as an array of floats.
         /// </summary>
@@ -29,25 +40,58 @@ namespace GestureBaseUI_Project.ViewModel
         /// </summary>
         private BlockingCollection<BodyData> bodyData;
 
-
+        /// <summary>
+        /// Total amount of pages in tutorial
+        /// </summary>
         private const int TOTAL_PAGES = 13;
 
+        /// <summary>
+        /// Keys to title strings.
+        /// </summary>
         private string[] TitlesKeys = new string[TOTAL_PAGES]
         {
             "title1","title2","title3","title4","title5","title6","title7","title8","title9","title10","title11","title12","title13"
         };
+
+        /// <summary>
+        /// Title strings, this are loaded from resource using the keys.
+        /// </summary>
         private string[] Titles = new string[TOTAL_PAGES];
 
+        /// <summary>
+        /// Keys to body text.
+        /// </summary>
         private string[] BodyKeys = new string[TOTAL_PAGES]
         {
             "body1","body2","body3","body4","body5","body6","body7","body8","body9","body10","body11","body12","body13"
         };
 
+        /// <summary>
+        /// Body texts, , this are loaded from resource using the keys.
+        /// </summary>
         private string[] BodyTexts = new string[TOTAL_PAGES];
 
+        /// <summary>
+        /// Map image number to the one using in the tutorial page.
+        /// </summary>
+        private int[] imagesMap = new int[TOTAL_PAGES] { 5, 0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12 };
 
+        /// <summary>
+        /// Path to all images.
+        /// </summary>
+        private List<string> _imagesPaths = new List<string>();
+
+        /// <summary>
+        /// Actions count
+        /// </summary>
+        private int count = 0;
+
+        //  private bool isImage = true;
+
+        /// <summary>
+        /// Info text that shows in all pages
+        /// </summary>
         private string _infoAll;
-
         public string InfoAll
         {
             get { return _infoAll; }
@@ -56,10 +100,10 @@ namespace GestureBaseUI_Project.ViewModel
                 SetValue(ref _infoAll, value);
             }
         }
-        private int[] imagesMap = new int[TOTAL_PAGES] { 5, 0 ,1,2,3,4,6,7,8,9,10,11,11};
 
-
-
+        /// <summary>
+        /// Actual page number.
+        /// </summary>
         private int _pageNumber = 0;
 
         public int PageNumber
@@ -71,20 +115,26 @@ namespace GestureBaseUI_Project.ViewModel
             }
         }
 
-        private string _helpText;
+        /// <summary>
+        /// Main body text.
+        /// </summary>
+        private string _bodyText;
         public string BodyText
         {
             get
             {
-                return _helpText;
+                return _bodyText;
             }
             set
             {
-                SetValue(ref _helpText, value);
+                SetValue(ref _bodyText, value);
             }
         }
 
-        private string _title = "Title";
+        /// <summary>
+        /// Page title.
+        /// </summary>
+        private string _title;
         public string Title
         {
             get { return _title; }
@@ -95,6 +145,9 @@ namespace GestureBaseUI_Project.ViewModel
 
         }
 
+        /// <summary>
+        /// Color of the circle.
+        /// </summary>
         private Color _circleColor = Colors.Yellow;
 
         public SolidColorBrush CircleColor
@@ -107,6 +160,9 @@ namespace GestureBaseUI_Project.ViewModel
             }
         }
 
+        /// <summary>
+        /// Gesture icon image
+        /// </summary>
         private ImageSource _gestureTypeImage;
         public ImageSource GestureTypeImage
         {
@@ -120,6 +176,9 @@ namespace GestureBaseUI_Project.ViewModel
             }
         }
 
+        /// <summary>
+        /// time to wait beetwen actions.
+        /// </summary>
         private int _waitTime = 1000;
 
         public int WaitTime
@@ -131,15 +190,14 @@ namespace GestureBaseUI_Project.ViewModel
             }
         }
 
-        private void SetGestureImage(int value)
-        {
-            Uri uri = new Uri(_imagesPaths[imagesMap[value]]);
-            BitmapImage temp = new BitmapImage(uri);
-            //need to freze image because is call from another thread.
-            temp.Freeze();
-            GestureTypeImage = temp;
-        }
+        /// <summary>
+        /// Control runnig of thread that take images from queue.
+        /// </summary>
+        private bool isRunning = true;
 
+        /// <summary>
+        /// Go to next page
+        /// </summary>
         public ICommand NextPage
         {
             get
@@ -147,6 +205,7 @@ namespace GestureBaseUI_Project.ViewModel
                 return new DelegateCommand(() =>
                 {
                     //next page
+                    count = 0;
                     GoNextPage();
 
 
@@ -154,10 +213,88 @@ namespace GestureBaseUI_Project.ViewModel
             }
         }
 
-        int count = 0;
+        /// <summary>
+        /// Go to prevous page
+        /// </summary>
+        public ICommand PreviousPage
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    //prvius page
+                    count = 0;
+                    GoPreviousPage();
+
+
+                });
+            }
+        }
+
+        /// <summary>
+        /// Create the view model.
+        /// </summary>
+        public TutorialViewModel()
+        {
+
+            //load strings
+            SetStrings(GetStringDict());
+
+            //get images pahts
+            DirectoryInfo di = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, @"Images/HandGestureIcons"));
+            FileInfo[] imagesPath = di.GetFiles("*.png");
+            Debug.WriteLine("images total: " + imagesPath.Length);
+
+            // set all images path
+            foreach (var i in imagesPath)
+            {
+                _imagesPaths.Add(i.FullName);
+            }
+
+            // sort images paths
+            _imagesPaths.Sort();
+
+            // start at page 0
+            ChangePage(0);
+
+            //Start queues.
+            this.images = new BlockingCollection<float[,]>();
+            this.bodyData = new BlockingCollection<BodyData>();
+
+            // Screen windwos
+            MyRect screen = new MyRect(
+            0,
+            0,
+            (float)System.Windows.SystemParameters.PrimaryScreenWidth,
+            (float)System.Windows.SystemParameters.PrimaryScreenHeight);
+
+            // hand movin area
+            MyRect moveArea = new MyRect(250, -50, 450, 100);
+
+            // create action manageer
+            am = new TutorialActionManager(this);
+
+            //start and create predictor
+            Task.Factory.StartNew(() => { predictor = new MainCamera(this.images, bodyData); });
+
+            // start thread that take images from queue.
+            new Thread(() =>
+            {
+                while (isRunning)
+                {
+                    float[,] im = images.Take();
+
+                    //if (!isImage) continue;
+                    am.AddImage(im);
+                }
+            }).Start();
+        }
+
+        /// <summary>
+        /// Call from manager when a new action is done.
+        /// </summary>
         public void GestureDone()
         {
-            Debug.WriteLine("Callled");
             //first
             if (count == 0)
             {
@@ -186,87 +323,42 @@ namespace GestureBaseUI_Project.ViewModel
                 count = 0;
             }
         }
+
+        /// <summary>
+        /// Go to next page.
+        /// </summary>
         public void GoNextPage()
         {
             _pageNumber = ++_pageNumber % TOTAL_PAGES;
             ChangePage(_pageNumber);
         }
 
-        public ICommand PreviousPage
+        /// <summary>
+        /// Go to previous page.
+        /// </summary>
+        private void GoPreviousPage()
         {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    //prvius page
-                    _pageNumber = --_pageNumber % TOTAL_PAGES;
-                    ChangePage(_pageNumber);
-
-                });
-            }
+            _pageNumber = --_pageNumber % TOTAL_PAGES;
+            ChangePage(_pageNumber);
         }
 
-        private List<string> _imagesPaths = new List<string>();
-        private readonly TutorialActionManager am;
-        public TutorialViewModel()
+        /// <summary>
+        /// Set the gesture image in the view.
+        /// </summary>
+        /// <param name="value"></param>
+        private void SetGestureImage(int value)
         {
-
-            //load strings
-            SetStrings(GetStringDict());
-
-            //get images pahts
-            DirectoryInfo di = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, @"Images/HandGestureIcons"));
-            FileInfo[] imagesPath = di.GetFiles("*.png");
-
-            foreach (var i in imagesPath)
-            {
-                _imagesPaths.Add(i.FullName);
-            }
-            _imagesPaths.Sort();
-
-
-
-            ChangePage(0);
-
-
-            this.images = new BlockingCollection<float[,]>();
-            this.bodyData = new BlockingCollection<BodyData>();
-
-
-            MyRect screen = new MyRect(
-            0,
-            0,
-            (float)System.Windows.SystemParameters.PrimaryScreenWidth,
-            (float)System.Windows.SystemParameters.PrimaryScreenHeight);
-
-
-
-            MyRect moveArea = new MyRect(250, -50, 450, 100);
-            am = new TutorialActionManager(this);
-            //start and create predictor
-            Task.Factory.StartNew(() => { MainCamera predictor = new MainCamera(this.images, bodyData); });
-
-
-            new Thread(() =>
-            {
-                while (true)
-                {
-
-                    // Debug.WriteLine("Count " + images.Count);
-                    float[,] im = images.Take();
-
-
-                    if (!isImage) continue;
-                    am.AddImage(im);
-
-                }
-            }).Start();
-
-
+            Uri uri = new Uri(_imagesPaths[imagesMap[value]]);
+            BitmapImage temp = new BitmapImage(uri);
+            //need to freze image because is call from another thread.
+            temp.Freeze();
+            GestureTypeImage = temp;
         }
 
-        private bool isImage = true;
-
+        /// <summary>
+        /// Load string from resources.
+        /// </summary>
+        /// <param name="dict"></param>
         private void SetStrings(ResourceDictionary dict)
         {
             InfoAll = dict["infoall"].ToString();
@@ -283,6 +375,10 @@ namespace GestureBaseUI_Project.ViewModel
             }
         }
 
+        /// <summary>
+        /// Change a page.
+        /// </summary>
+        /// <param name="v"></param>
         private void ChangePage(int v)
         {
             BodyText = BodyTexts[v];
@@ -290,8 +386,10 @@ namespace GestureBaseUI_Project.ViewModel
             SetGestureImage(v);
         }
 
-
-
+        /// <summary>
+        /// Load resource dictionary
+        /// </summary>
+        /// <returns></returns>
         private ResourceDictionary GetStringDict()
         {
             ResourceDictionary dict = new ResourceDictionary();
@@ -312,6 +410,17 @@ namespace GestureBaseUI_Project.ViewModel
             }
             return dict;
 
+        }
+               
+        /// <summary>
+        /// Stop threads.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void TutorialView_Unloaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this.isRunning = false;
+            this.predictor.Close();
         }
     }
 }
