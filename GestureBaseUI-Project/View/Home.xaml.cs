@@ -21,6 +21,7 @@ namespace GestureBaseUI_Project
             //Create and sets the view model.
             _viewModel = new HomeViewModel();
             DataContext = _viewModel;
+            this.Resources.MergedDictionaries.Add(App.resdict);
             
         }
 
@@ -35,9 +36,9 @@ namespace GestureBaseUI_Project
             this.NavigationService.Navigate(new Recorder());
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void PracticelTutorial(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new Prediction());
+            this.NavigationService.Navigate(new PracticeTutorial());
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)

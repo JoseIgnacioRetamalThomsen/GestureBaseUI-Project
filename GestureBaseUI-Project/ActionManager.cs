@@ -34,6 +34,11 @@ namespace GestureBaseUI_Project
         private readonly ActionCounter counter = new ActionCounter();
 
         MainAppViewModel _viewModel;
+
+        /// <summary>
+        /// Acttion on use.
+        /// </summary>
+        private int actual = 5;
         public ActionManager(HandPositionMapper mousecontroller, MainAppViewModel vm)
         {
 
@@ -46,7 +51,7 @@ namespace GestureBaseUI_Project
             
         }
 
-        int actual = 5;
+        
         bool ready = false;
         bool moving = false;
 
@@ -245,7 +250,7 @@ namespace GestureBaseUI_Project
 
     }
 
-
+    /*
     public class ActionCounter
     {
         private int[] MIN_FOR_CHANGE = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 };
@@ -306,4 +311,5 @@ namespace GestureBaseUI_Project
 
         }
     }
+    */
 }

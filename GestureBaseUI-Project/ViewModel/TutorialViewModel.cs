@@ -1,13 +1,11 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using GestureBaseUI_Project.Camera;
+﻿using GestureBaseUI_Project.Camera;
 using GestureBaseUI_Project.Helper;
-using GestureBaseUI_Project.Models;
+using GestureBaseUI_Project.View;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,9 +15,11 @@ using System.Windows.Media.Imaging;
 
 namespace GestureBaseUI_Project.ViewModel
 {
+    /// <summary>
+    /// The view model of the tutorial.
+    /// </summary>
     public class TutorialViewModel : BaseViewModel
     {
-
         /// <summary>
         /// Manage the action of the tutorial, read the inputs.
         /// </summary>
@@ -230,20 +230,18 @@ namespace GestureBaseUI_Project.ViewModel
                 });
             }
         }
-
+                
         /// <summary>
         /// Create the view model.
         /// </summary>
         public TutorialViewModel()
-        {
-
-            //load strings
-            SetStrings(GetStringDict());
+        {            
+                     
+            SetStrings(App.resdict);
 
             //get images pahts
             DirectoryInfo di = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, @"Images/HandGestureIcons"));
             FileInfo[] imagesPath = di.GetFiles("*.png");
-            Debug.WriteLine("images total: " + imagesPath.Length);
 
             // set all images path
             foreach (var i in imagesPath)
@@ -386,32 +384,8 @@ namespace GestureBaseUI_Project.ViewModel
             SetGestureImage(v);
         }
 
-        /// <summary>
-        /// Load resource dictionary
-        /// </summary>
-        /// <returns></returns>
-        private ResourceDictionary GetStringDict()
-        {
-            ResourceDictionary dict = new ResourceDictionary();
-            switch (Thread.CurrentThread.CurrentCulture.ToString())
-            {
-                case "en-US":
-                    dict.Source = new Uri("..\\Resources\\Tutorial.xaml",
-                                  UriKind.Relative);
-                    break;
-                case "fr-CA":
-                    dict.Source = new Uri("..\\Resources\\StringResources.fr-CA.xaml",
-                                       UriKind.Relative);
-                    break;
-                default:
-                    dict.Source = new Uri("..\\Resources\\Tutorial.xaml",
-                                      UriKind.Relative);
-                    break;
-            }
-            return dict;
+      
 
-        }
-               
         /// <summary>
         /// Stop threads.
         /// </summary>

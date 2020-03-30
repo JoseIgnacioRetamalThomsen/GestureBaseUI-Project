@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using GestureBaseUI_Project;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +15,11 @@ namespace GestureBaseUI_Project
     /// </summary>
     public partial class App : Application
     {
+        public static ResourceDictionary resdict;
+        public App()
+        {
+            resdict = MyUtil.GetStringDict();
+            this.Resources.MergedDictionaries.Add(resdict);
+        }
     }
 }

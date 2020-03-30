@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GestureBaseUI_Project.Camera
@@ -258,7 +259,8 @@ namespace GestureBaseUI_Project.Camera
         public void Close()
         {
             running = false;
-
+            // wait 0.5 second for be sure the last loop was done.
+            Thread.Sleep(500);
             if (this.kinect != null)
             {
                 this.kinect.Dispose();

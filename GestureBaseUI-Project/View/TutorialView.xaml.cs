@@ -11,6 +11,9 @@ namespace GestureBaseUI_Project.View
     /// </summary>
     public partial class TutorialView : Page
     {
+        /// <summary>
+        /// The view model
+        /// </summary>
         private readonly TutorialViewModel _viewModel;
         public TutorialView()
         {
@@ -18,13 +21,9 @@ namespace GestureBaseUI_Project.View
 
             _viewModel = new TutorialViewModel();
             DataContext = _viewModel;
+            this.Resources.MergedDictionaries.Add(App.resdict);
             this.Unloaded += _viewModel.TutorialView_Unloaded;
             
-        }
-
-        private void TutorialView_Unloaded(object sender, System.Windows.RoutedEventArgs e)
-        {
-            Debug.WriteLine("unloaded xxxxxxxxxxxxxxxxxxxxxxxx");
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)

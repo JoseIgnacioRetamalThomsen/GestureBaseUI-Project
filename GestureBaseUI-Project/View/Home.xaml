@@ -28,12 +28,12 @@
                             <ColumnDefinition Width="2*" />
 
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Margin="10,10,10,10" Foreground="White" FontSize="52" Style="{DynamicResource FontType}">My Windows Interface Control</TextBlock>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource appname}" Margin="10,10,10,10" Foreground="White" FontSize="52" Style="{DynamicResource FontType}"/>
                         <Button Grid.Column="1"  Margin="10,10,10,10"   Click="Tutorial_Click" Width="52" Height="52" FontSize="38" HorizontalAlignment="Right" Style="{DynamicResource ButtonStyle}">?</Button>
 
                     </Grid>
 
-                    <TextBlock  Foreground="#F4D14B" FontSize="22" Style="{DynamicResource FontType}">A solution that allows you to control the windows interface using you hands</TextBlock>
+                    <TextBlock   Text="{DynamicResource appdescription}" Foreground="#F4D14B" FontSize="22" Style="{DynamicResource FontType}"/>
                     <TextBlock>Bllaa</TextBlock>
                     <TextBlock>Bllaa</TextBlock>
                     <TextBlock>Bllaa</TextBlock>
@@ -48,9 +48,9 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Background="#1D3442">
-                    <Button  Margin="10,10,10,10"   Click="Tutorial_Click" Style="{DynamicResource ButtonStyle}">Tutorial</Button>
-                    <Button Margin="10,10,10,10"   Click="Recorder_Button_Click" Style="{DynamicResource ButtonStyle}">Record Iamges For train</Button>
-                    <Button  Margin="10,10,10,10"  Click="Button_Click_1" Style="{DynamicResource ButtonStyle}">Prediction</Button>
+                    <Button  Margin="10,10,10,10"   Click="Tutorial_Click" Style="{DynamicResource ButtonStyle}" Content="{DynamicResource tutorial}"/>
+                    <Button Margin="10,10,10,10"   Click="Recorder_Button_Click" Style="{DynamicResource ButtonStyle}" >Old</Button>
+                    <Button  Margin="10,10,10,10"  Click="PracticelTutorial" Style="{DynamicResource ButtonStyle}" Content="{DynamicResource practice}"/> 
                     <Button  Margin="10,10,10,10"  Click="Button_Click_2"  Style="{DynamicResource ButtonStyle}">Main App</Button>
                     <Button  Margin="10,10,10,10"  Click="Button_Click_3"  Style="{DynamicResource ButtonStyle}">Main App</Button>
 

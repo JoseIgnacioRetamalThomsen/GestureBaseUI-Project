@@ -43,4 +43,17 @@
     <system:String x:Key="title13">Close Hand</system:String>
     <system:String x:Key="body13">Close the hand to get back to the program interface.</system:String>
 
+    <system:String x:Key="back">Back</system:String>
+
+    <system:String x:Key="tutorial">Tutorial</system:String>
+    
+    <system:String x:Key="practice">Practice</system:String>
+
+    <system:String x:Key="mainapp">Main App</system:String>
+
+    <system:String x:Key="appname">My Windows Interface Control</system:String>
+    <system:String x:Key="appdescription">A solution that allows you to control the windows interface using you hands.</system:String>
+    
+
+
 </ResourceDictionary>
