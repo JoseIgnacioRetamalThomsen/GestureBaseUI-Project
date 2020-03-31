@@ -53,6 +53,7 @@
                     <Button  Margin="10,10,10,10"   Click="Button_Click" Style="{DynamicResource ButtonStyle}">View</Button>
                     <Button Margin="10,10,10,10"   Click="Recorder_Button_Click" Style="{DynamicResource ButtonStyle}">Record Iamges For train</Button>
                     <Button  Margin="10,10,10,10"  Click="Button_Click_1" Style="{DynamicResource ButtonStyle}">Prediction</Button>
+                    <Button  Margin="10,10,10,10"  Click="Button_Voice_Command_On" Style="{DynamicResource ButtonStyle}">Voice Command</Button>
 
                 </StackPanel>
 
