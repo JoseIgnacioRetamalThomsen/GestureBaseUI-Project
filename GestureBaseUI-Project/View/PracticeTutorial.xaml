@@ -29,10 +29,10 @@
                 <Button  Content="{DynamicResource back}" Width="50" Height="30" Style="{DynamicResource ButtonStyle}"/>
 
                 <StackPanel Grid.Column="1">
-                    <TextBlock  TextAlignment="Center" Text="Title" Style="{DynamicResource TutorialTitle}"/>
+                    <TextBlock  TextAlignment="Center" Text="{DynamicResource practicetitle}" Style="{DynamicResource TutorialTitle}"/>
                     <Separator />
-                   
-                    
+
+
                 </StackPanel>
 
                 <Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
@@ -49,29 +49,43 @@
 
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Ellipse 
+
+                  
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse 
                         Width="100"
                         Height="100"
                         Fill="{Binding CircleColor}"
                         Canvas.Left="135"
                         Canvas.Top="25"/>
-
-                    <Image Source="{Binding GestureTypeImage}" Grid.Row="1"   Width="100" Height="100"/>
+                        <Ellipse 
+                        Width="100"
+                        Height="100"
+                        Fill="{Binding CircleColor1}"
+                        Canvas.Left="135"
+                        Canvas.Top="25"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" >
+                        <Image Margin="5" Source="{Binding GestureTypeImage}"    Width="100" Height="100"/>
+                        <Separator/>
+                        <Image Margin="5" Source="{Binding GestureTypeImage1}"    Width="100" Height="100"/>
+                    </StackPanel>
                     <StackPanel Grid.Column="1" Grid.RowSpan="2">
-                        <TextBlock Text="{Binding BodyText}" Style="{StaticResource TutorialBody}"/>
-                        <TextBlock Text="{Binding InfoAll}" Style="{StaticResource TutorialBody}"/>
+                        <TextBlock Text="{DynamicResource practicebody1}" Style="{StaticResource TutorialBody}"/>
+                        <TextBlock Text="{DynamicResource practicebody2}" Style="{StaticResource TutorialBody}"/>
                     </StackPanel>
                 </Grid>
 
+                <StackPanel Grid.Row="2" Grid.RowSpan="2" >
+                    
+                </StackPanel>
+                
+                <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
 
+                    <TextBlock Text="{Binding SliderValue}" Width="100" FontSize="30" Foreground="White" TextAlignment="Center"/>
+                    <Slider Width="400" Value="{Binding SliderValue}" Minimum="2" Maximum="30" TickFrequency="1" />
 
-
-
-
-
-
-
-
+                </StackPanel>
             </Grid>
         </Border>
 

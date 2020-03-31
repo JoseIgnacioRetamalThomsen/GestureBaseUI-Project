@@ -24,6 +24,8 @@ namespace GestureBaseUI_Project
         /// </summary>
         private static WindowController instance = null;
 
+        private IntPtr _activeWindow;
+
         /// <summary>
         /// Returns the unique instance, will create it if is the first time called.
         /// </summary>
@@ -45,6 +47,8 @@ namespace GestureBaseUI_Project
             }
         }
 
+        private IntPtr AppWindow { get; set; }
+
         /// <summary>
         /// Private constructor for avoid creating multiple instances.
         /// </summary>
@@ -53,6 +57,8 @@ namespace GestureBaseUI_Project
            
         }
         #endregion
+
+    
 
         private List<string> Windows = new List<string>();
         public List<ProcessLink> WindowsPtrs = new List<ProcessLink>();
@@ -83,9 +89,42 @@ namespace GestureBaseUI_Project
             return screenshot;
         }
 
+        /// <summary>
+        /// Set the app winwos to actuals window
+        /// </summary>
+        public void SetAppWindow()
+        {
+            AppWindow = GetForegroundWindow();
+        }
+
+        public bool SetAppWindowsActive()
+        {
+            if (AppWindow != null)
+            {
+                SetForegroundWindow(AppWindow);
+                ShowWindowNormal(AppWindow);
+                if(_activeWindow == AppWindow)
+                {
+                    return true;
+
+                }else
+                {
+                    _activeWindow = AppWindow;
+                    return false;
+                }
+               
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public void OpenWindow(IntPtr ptr)
         {
             SetForegroundWindow(ptr);
+            MaximazeWindow(ptr);
+            _activeWindow = ptr;
         }
        
 
@@ -140,6 +179,15 @@ namespace GestureBaseUI_Project
             return list;
         }
 
+        public void CloseActualWindow()
+        {
+            var aw = GetForegroundWindow();
+            if (aw != AppWindow)
+            {
+                ShowWindow(aw, 0);
+            }
+        }
+
         public IntPtr GetActiveWindow()
         {
             return GetForegroundWindow();
@@ -148,7 +196,32 @@ namespace GestureBaseUI_Project
         public void SetActiveWindows(IntPtr ptr)
         {
             SetForegroundWindow(ptr);
-            SetActiveWindow(ptr);
+            MaximazeWindow(ptr);
+        }
+
+        public void MaximazeWindow(IntPtr ptr)
+        {
+            ShowWindow(ptr, 3);
+        }
+
+        public void MinimazeWindows(IntPtr ptr)
+        {
+            ShowWindow(ptr, 6);
+        }
+
+        public void CloseWindow(IntPtr ptr)
+        {
+            ShowWindow(ptr, 0);
+        }
+
+        public void ShowWindowNormal(IntPtr ptr)
+        {
+            ShowWindow(ptr, 1);
+        }
+
+        public void OpenNew(string fullPath)
+        {
+            Process.Start(fullPath);
         }
     }
 }

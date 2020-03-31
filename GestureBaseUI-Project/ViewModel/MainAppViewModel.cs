@@ -1,19 +1,23 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using GestureBaseUI_Project.Camera;
 using GestureBaseUI_Project.Models;
+using GestureBaseUI_Project.View;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace GestureBaseUI_Project.ViewModel
 {
     public class MainAppViewModel : BaseViewModel
     {
-        
+
         public ObservableCollection<ProcessLink> Links { get; set; }
+
+        private MainCamera predictor;
 
         /// <summary>
         /// Queue for output images, images are just represent as an array of floats.
@@ -25,18 +29,24 @@ namespace GestureBaseUI_Project.ViewModel
         /// </summary>
         private BlockingCollection<BodyData> bodyData;
 
-
-
+        /// <summary>
+        /// Manage the actions to perform after recognizing images
+        /// </summary>
         private ActionManager actionManager;
 
-       
 
+        /// <summary>
+        /// Control loop for taking images from queue
+        /// </summary>
+        private bool isRunnig = true;
+        private MainApp mainApp;
 
-        public MainAppViewModel()
+        public MainAppViewModel(MainApp mainApp)
         {
-   
-            this.images = new BlockingCollection<float[,]>() ;
-            this.bodyData = new BlockingCollection<BodyData>() ;
+            this.mainApp = mainApp;
+
+            this.images = new BlockingCollection<float[,]>();
+            this.bodyData = new BlockingCollection<BodyData>();
 
             Links = new ObservableCollection<ProcessLink>();
             LoadLinks();
@@ -49,18 +59,18 @@ namespace GestureBaseUI_Project.ViewModel
 
 
 
-            MyRect moveArea = new MyRect(250, -50, 450,100);
+            MyRect moveArea = new MyRect(250, -50, 450, 100);
 
             HandPositionMapper mc = new HandPositionMapper(screen, moveArea);
             actionManager = new ActionManager(mc, this);
 
-            Task.Factory.StartNew(() => { MainCamera predictor = new MainCamera(images,bodyData);});
+            Task.Factory.StartNew(() => { predictor = new MainCamera(images, bodyData); });
 
 
 
             new Thread(() =>
             {
-                while (true)
+                while (isRunnig)
                 {
                     // Debug.WriteLine("Count " + images.Count);
                     float[,] im = images.Take();
@@ -68,7 +78,7 @@ namespace GestureBaseUI_Project.ViewModel
                     actionManager.SetPosition(bodyData.Take().HandPosition);
 
                     actionManager.AddImage(im);
-              
+
                 }
             }).Start();
 
@@ -79,6 +89,7 @@ namespace GestureBaseUI_Project.ViewModel
 
         }
 
+
         private void UpdateList(UpdateListRequest obj)
         {
             LoadLinks();
@@ -86,17 +97,20 @@ namespace GestureBaseUI_Project.ViewModel
 
         public void LoadLinks()
         {
-            /*
-            Links.Clear();
-            foreach(var i in WindowController.Instance.GetAllActiveWindows())
-            {
-                Links.Add(i);
-            }*/
-            
+
             Links = new ObservableCollection<ProcessLink>(WindowController.Instance.GetAllActiveWindows());
-     
         }
 
+        /// <summary>
+        /// Stop all thread
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void MainApp_Unloaded(object sender, RoutedEventArgs e)
+        {
+            isRunnig = false;
+            predictor.Close();
+        }
 
     }
 }

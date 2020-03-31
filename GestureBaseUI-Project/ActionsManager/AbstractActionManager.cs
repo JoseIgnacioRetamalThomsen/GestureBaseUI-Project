@@ -33,7 +33,7 @@ namespace GestureBaseUI_Project.ActionsManager
 
         public abstract void Update(int next);
         
-        private void InitActions()
+        public void InitActions()
         {
             this.actions = new Dictionary<string, Action>();
             this.actions.Add("0", Moving);
@@ -51,5 +51,7 @@ namespace GestureBaseUI_Project.ActionsManager
             this.actions.Add("12", Close);
 
         }
+
+      
     }
 }

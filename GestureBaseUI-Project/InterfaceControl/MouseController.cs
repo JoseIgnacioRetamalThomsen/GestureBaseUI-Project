@@ -115,6 +115,13 @@ namespace GestureBaseUI_Project
         {
             mouse_event((uint)MouseEventFlags.WHEEL, 0, 0, amount, 1);
         }
+
+        public void DoubleClick()
+        {
+            mouse_event((uint)MouseEventFlags.LEFTDOWN | (uint)MouseEventFlags.LEFTUP, 0, 0, 0, 0);
+            mouse_event((uint)MouseEventFlags.LEFTDOWN | (uint)MouseEventFlags.LEFTUP, 0, 0, 0, 0);
+
+        }
         #endregion
 
     }

@@ -1,4 +1,5 @@
-﻿using GestureBaseUI_Project.Models;
+﻿using GalaSoft.MvvmLight.Messaging;
+using GestureBaseUI_Project.Models;
 using GestureBaseUI_Project.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -31,17 +32,39 @@ namespace GestureBaseUI_Project.View
             InitializeComponent();
 
             //Create and sets the view model.
-            _viewModel = new MainAppViewModel();
+            _viewModel = new MainAppViewModel(this);
             DataContext = _viewModel;
 
+            Resources.MergedDictionaries.Add(App.resdict);
+
             LinksView.ItemsSource = _viewModel.Links;
+
+            Unloaded += _viewModel.MainApp_Unloaded;
+
+            
+                Messenger.Default.Register<NavigateRequest>(
+                  this,
+                  NavigateHome);
+            
         }
-     
+
+        private void NavigateHome(NavigateRequest obj)
+        {
+            Dispatcher.Invoke(new Action(() => { this.NavigationService.Navigate(new Home()); }));
+            
+        }
+
         private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Debug.WriteLine("here" + ((ProcessLink)((ListViewItem)sender).DataContext).Windows) ;
+     
             WindowController.Instance.OpenWindow(((ProcessLink)((ListViewItem)sender).DataContext).Windows);
 
+        }
+
+        
+        private void BackButton(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new Home());
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GestureBaseUI_Project.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -17,79 +18,98 @@ namespace GestureBaseUI_Project.ActionsManager
         /// </summary>
         private readonly ActionCounter counter = new ActionCounter();
 
-        public PracticeActionManager()
+        public PracticeActionManager(PracticeTutorialViewModel practiceTutorialViewModel)
         {
+            this.practiceTutorialViewModel = practiceTutorialViewModel;
             model = new Model(System.IO.Path.Combine(Environment.CurrentDirectory, @"CNN\Model\gesture_model1.pb"));
         }
+
+
         public override void Close()
         {
-            throw new NotImplementedException();
+            practiceTutorialViewModel.SetReady(false);
+            practiceTutorialViewModel.SetActionDone(12);
+           
         }
 
         public override void Cow()
         {
-            throw new NotImplementedException();
+            practiceTutorialViewModel.SetReady(false);
+            practiceTutorialViewModel.SetActionDone(11);
         }
 
         public override void Four()
         {
-            throw new NotImplementedException();
+            practiceTutorialViewModel.SetReady(false);
+            practiceTutorialViewModel.SetActionDone(5);
         }
 
         public override void Moving()
         {
-            throw new NotImplementedException();
+            practiceTutorialViewModel.SetReady(false);
+            practiceTutorialViewModel.SetActionDone(1);
+
         }
 
         public override void One()
         {
-            throw new NotImplementedException();
+            practiceTutorialViewModel.SetReady(false);
+            practiceTutorialViewModel.SetActionDone(2);
         }
 
         public override void Ready()
         {
-            throw new NotImplementedException();
+            practiceTutorialViewModel.SetReady(true);
+            practiceTutorialViewModel.SetActionDone(-1);
         }
 
         public override void Surf()
         {
-            throw new NotImplementedException();
+            practiceTutorialViewModel.SetReady(false);
+            practiceTutorialViewModel.SetActionDone(10);
         }
 
         public override void Three()
         {
-            throw new NotImplementedException();
+            practiceTutorialViewModel.SetReady(false);
+            practiceTutorialViewModel.SetActionDone(4);
         }
 
         public override void Two()
         {
-            throw new NotImplementedException();
+            practiceTutorialViewModel.SetReady(false);
+            practiceTutorialViewModel.SetActionDone(3);
         }
 
        
 
         public override void WaveDown()
         {
-            throw new NotImplementedException();
+            practiceTutorialViewModel.SetReady(false);
+            practiceTutorialViewModel.SetActionDone(6);
         }
 
         public override void WaveLeft()
         {
-            throw new NotImplementedException();
+            practiceTutorialViewModel.SetReady(false);
+            practiceTutorialViewModel.SetActionDone(8);
         }
 
         public override void WaveRigth()
         {
-            throw new NotImplementedException();
+            practiceTutorialViewModel.SetReady(false);
+            practiceTutorialViewModel.SetActionDone(9);
         }
 
         public override void Waveup()
         {
-            throw new NotImplementedException();
+            practiceTutorialViewModel.SetReady(false);
+            practiceTutorialViewModel.SetActionDone(7);
         }
 
         private bool ready = false;
-        private int actual = 0;
+        private int actual = 5;
+        private PracticeTutorialViewModel practiceTutorialViewModel;
 
         public void AddImage(float[,] image)
         {
@@ -109,10 +129,12 @@ namespace GestureBaseUI_Project.ActionsManager
             {
                 if (next == 5)
                 {
+                    this.Ready();
                     ready = true;
-                    Debug.WriteLine("Ready");
+                   
+                    //this.actions[actual.ToString()]?.Invoke();
                     //Thread.Sleep(500);
-                }
+                }/*
                 else if (actual == 0)
                 {
                     Moving();
@@ -124,8 +146,13 @@ namespace GestureBaseUI_Project.ActionsManager
                 else if (actual == 7)
                 {
                     Waveup();
-                }
+                }*/
             }
+        }
+
+        public void SetMinForChange(int min)
+        {
+            counter.SetAllMin(min);
         }
     }
 }

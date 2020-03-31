@@ -163,6 +163,22 @@ namespace GestureBaseUI_Project.ViewModel
         /// <summary>
         /// Gesture icon image
         /// </summary>
+        private ImageSource _gestureTypeImage1;
+        public ImageSource GestureTypeImage1
+        {
+            get
+            {
+                return this._gestureTypeImage1;
+            }
+            set
+            {
+                SetValue(ref _gestureTypeImage1, value);
+            }
+        }
+
+        /// <summary>
+        /// Gesture icon image
+        /// </summary>
         private ImageSource _gestureTypeImage;
         public ImageSource GestureTypeImage
         {

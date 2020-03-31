@@ -249,5 +249,24 @@ namespace GestureBaseUI_Project.Win32Wrapper
         public static extern bool BitBlt(IntPtr hObject, int nXDest, int nYDest, int nWidth,
             int nHeight, IntPtr hObjectSource, int nXSrc, int nYSrc, int dwRop);
 
+        /// <summary>
+        /// Show a windows
+        /// </summary>
+        /// <param name="hWnd"></param>
+        /// <param name="nCmdShow"></param>
+        /// <returns></returns>
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+
+        /// <summary>
+        /// Close windows
+        /// </summary>
+        /// <param name="hwnd"></param>
+        /// <returns></returns>
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public  static extern bool DestroyWindow(IntPtr hwnd);
     }
 }

@@ -14,17 +14,29 @@
             <Grid Margin="0" Background="#223D4F"   >
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="10*" />
+                    <RowDefinition Height="3*" />
                     <RowDefinition Height="5*" />
                     <RowDefinition Height="5*"/>
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <StackPanel  x:Name="Links" Grid.Row="1" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Click="BackButton" Content="{DynamicResource back}" Width="50" Height="30" Style="{DynamicResource ButtonStyle}"/>
+
+
+                <StackPanel  x:Name="Links" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" >
 
 
 
-                    <ListView
+
+
+
+                    <ListView 
                               x:Name="LinksView" 
                               HorizontalAlignment="Stretch"
                               VerticalAlignment="Top">
@@ -41,24 +53,31 @@
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                               
-                                    <StackPanel  Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
-                                        <Image  Source="{Binding ImageData}" Width="100" HorizontalAlignment="Stretch" VerticalAlignment="Top" Stretch="UniformToFill" />
+                                <StackPanel  Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
-                                        <TextBlock Text="{Binding Title}" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                                    <Image  Source="{Binding ImageData}" Width="100" HorizontalAlignment="Stretch" VerticalAlignment="Top" Stretch="UniformToFill" />
 
-                                    </StackPanel>
-                                
-                          
+                                    <TextBlock Text="{Binding Title}" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+
+                                </StackPanel>
+
+
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
                 </StackPanel>
+
+
+
+
+
+
 
             </Grid>
         </Border>
 
     </Grid>
 
+  
 </Page>

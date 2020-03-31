@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 
 namespace GestureBaseUI_Project.ViewModel
 {
-    public class PracticeTutorialViewModel:BaseViewModel
+    public class PracticeTutorialViewModel : BaseViewModel
     {
         /// <summary>
         /// Manage the action of the tutorial, read the inputs.
@@ -49,6 +49,21 @@ namespace GestureBaseUI_Project.ViewModel
         }
 
         /// <summary>
+        /// Color of the circle.
+        /// </summary>
+        private Color _circleColor1 = Colors.Yellow;
+
+        public SolidColorBrush CircleColor1
+        {
+            get { return new SolidColorBrush(_circleColor1); }
+
+            set
+            {
+                SetValue(ref _circleColor1, value.Color);
+            }
+        }
+
+        /// <summary>
         /// Gesture icon image
         /// </summary>
         private ImageSource _gestureTypeImage;
@@ -65,6 +80,22 @@ namespace GestureBaseUI_Project.ViewModel
         }
 
         /// <summary>
+        /// Gesture icon image
+        /// </summary>
+        private ImageSource _gestureTypeImage1;
+        public ImageSource GestureTypeImage1
+        {
+            get
+            {
+                return this._gestureTypeImage1;
+            }
+            set
+            {
+                SetValue(ref _gestureTypeImage1, value);
+            }
+        }
+
+        /// <summary>
         /// Path to all images.
         /// </summary>
         private List<string> _imagesPaths = new List<string>();
@@ -73,6 +104,17 @@ namespace GestureBaseUI_Project.ViewModel
         /// Control runnig of thread that take images from queue.
         /// </summary>
         private bool isRunning = true;
+
+        private int _sliderValue = 10;
+        public int SliderValue
+        {
+            get { return _sliderValue; }
+            set
+            {
+                SetValue(ref _sliderValue, value);
+                am.SetMinForChange(value);
+            }
+        }
 
         public PracticeTutorialViewModel()
         {
@@ -91,9 +133,13 @@ namespace GestureBaseUI_Project.ViewModel
             }
 
             SetReadyImage(false);
+            SetGestureImage(-1);
 
             // create action manageer
-            am = new PracticeActionManager();
+            am = new PracticeActionManager(this);
+            SetupActionManager();
+
+
 
             //start and create predictor
             Task.Factory.StartNew(() => { predictor = new MainCamera(this.images, bodyData); });
@@ -113,12 +159,46 @@ namespace GestureBaseUI_Project.ViewModel
 
         }
 
+        private void SetupActionManager()
+        {
+            am.SetMinForChange(App.userdata.Speed);
+        }
+
         private const int TOTAL_IMAGES = 13;
 
         /// <summary>
         /// Map image number to the one using in the tutorial page.
         /// </summary>
         private int[] imagesMap = new int[TOTAL_IMAGES] { 5, 0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12 };
+
+        public void SetReady(bool isReady)
+        {
+            if (isReady)
+            {
+                CircleColor = new SolidColorBrush(Colors.Green);
+                SetReadyImage(true);
+            }
+            else
+            {
+                CircleColor = new SolidColorBrush(Colors.Yellow);
+                SetReadyImage(false);
+            }
+        }
+
+        public void SetActionDone(int gest)
+        {
+            if (gest >= 0)
+            {
+                SetGestureImage(gest);
+                CircleColor1 = new SolidColorBrush(Colors.Green);
+            }
+            else
+            {
+                CircleColor1 = new SolidColorBrush(Colors.Yellow);
+                SetGestureImage(gest);
+            }
+
+        }
 
         /// <summary>
         /// Set the gesture image in the view.
@@ -144,5 +224,27 @@ namespace GestureBaseUI_Project.ViewModel
             }
         }
 
+        private void SetGestureImage(int imageNum)
+        {
+            if (imageNum >= 0)
+            {
+                Uri uri = new Uri(_imagesPaths[imagesMap[imageNum]]);
+                BitmapImage temp = new BitmapImage(uri);
+                //need to freze image because is call from another thread.
+                temp.Freeze();
+                GestureTypeImage1 = temp;
+            }
+            else
+            {
+                Uri uri = new Uri(Path.Combine(Environment.CurrentDirectory, @"Images/Icons/two.png"));
+                BitmapImage temp = new BitmapImage(uri);
+                //need to freze image because is call from another thread.
+                temp.Freeze();
+                GestureTypeImage1 = temp;
+            }
+        }
+
     }
+
 }
+

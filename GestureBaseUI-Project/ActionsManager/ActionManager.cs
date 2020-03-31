@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
+using GestureBaseUI_Project.ActionsManager;
 using GestureBaseUI_Project.Models;
 using GestureBaseUI_Project.ViewModel;
 using System;
@@ -11,13 +12,13 @@ using System.Threading;
 
 namespace GestureBaseUI_Project
 {
-    public class ActionManager
+    public class ActionManager : AbstractActionManager
     {
         /// <summary>
         /// Model for predicition.
         /// </summary>
         private readonly Model model;
-               
+
         /// <summary>
         /// Maps the hand position to mouse in the screen.
         /// </summary>
@@ -26,7 +27,7 @@ namespace GestureBaseUI_Project
         /// <summary>
         /// Map actions.
         /// </summary>
-        Dictionary<string, Action> actions;
+       // Dictionary<string, Action> actions;
 
         /// <summary>
         /// Counts predictions for decide when to change
@@ -39,23 +40,30 @@ namespace GestureBaseUI_Project
         /// Acttion on use.
         /// </summary>
         private int actual = 5;
-        public ActionManager(HandPositionMapper mousecontroller, MainAppViewModel vm)
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="mousecontroller"></param>
+        /// <param name="vm"></param>
+        public ActionManager(HandPositionMapper mousecontroller, MainAppViewModel vm) : base()
         {
 
+            //InitActions();
             _viewModel = vm;
             this.inputMapper = mousecontroller;
 
             model = new Model(System.IO.Path.Combine(Environment.CurrentDirectory, @"CNN\Model\gesture_model1.pb"));
 
-            InitActions();
-            
+            WindowController.Instance.SetAppWindow();
+
         }
 
-        
+
         bool ready = false;
         bool moving = false;
 
-        public void Update(int next)
+        public override void Update(int next)
         {
 
             if (ready)
@@ -90,7 +98,7 @@ namespace GestureBaseUI_Project
 
 
         }
-
+        /*
         private void InitActions()
         {
             this.actions = new Dictionary<string, Action>();
@@ -109,65 +117,68 @@ namespace GestureBaseUI_Project
             this.actions.Add("12", Close);
 
         }
+        */
 
 
-
-        private void Moving()
+        #region Actions Methdos
+        public override void Moving()
         {
-            Debug.WriteLine("moving");
             MouseController.Instance.SetPosition(lastPoint.X, lastPoint.Y);
         }
 
-        private void One()
+        public override void One()
         {
-            Debug.WriteLine("click");
             MouseController.Instance.Click();
             ready = false;
         }
 
-        private void Two()
+        public override void Two()
         {
-            Debug.WriteLine("Two");
+            MouseController.Instance.DoubleClick();
             ready = false;
-
         }
-        private void Three()
+
+        public override void Three()
         {
 
             //C:\Users\pepe\eclipse\java-2019-09\eclipse\eclipse.exe
             Debug.WriteLine("Three");
-            Process.Start("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe");
+           // Process.Start("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe");
 
-            AskUpdate();
+           // AskUpdate();
             ready = false;
         }
-        private void Four()
+
+        public override void Four()
         {
+            WindowController.Instance.CloseActualWindow();
             Debug.WriteLine("four");
         }
 
-        private void Ready()
+        public override void Ready()
         {
             Debug.WriteLine("Ready");
         }
 
-        private void WaveDown()
+        public override void WaveDown()
         {
             MouseController.Instance.ScrolDown(40);
             Debug.WriteLine("WaveDown");
 
         }
-        private void Waveup()
+
+        public override void Waveup()
         {
             MouseController.Instance.ScrolUp(40);
             Debug.WriteLine("Wave up");
 
         }
-        private void WaveLeft()
+
+        public override void WaveLeft()
         {
             IntPtr wp = WindowController.Instance.GetActiveWindow();
 
-            Debug.WriteLine("count " + _viewModel.Links.Count);
+
 
             int position = 0;
             for (int i = 0; i < _viewModel.Links.Count; i++)
@@ -183,7 +194,8 @@ namespace GestureBaseUI_Project
             WindowController.Instance.SetActiveWindows(nextP);
             Debug.WriteLine("waveLeft");
         }
-        private void WaveRigth()
+
+        public override void WaveRigth()
         {
 
             IntPtr wp = WindowController.Instance.GetActiveWindow();
@@ -204,19 +216,28 @@ namespace GestureBaseUI_Project
             WindowController.Instance.SetActiveWindows(nextP);
             Debug.WriteLine("WaveRight");
         }
-        private void Surf()
+
+
+        public override void Surf()
         {
-            Debug.WriteLine("surf");
-        }
-        private void Cow()
-        {
-            Debug.WriteLine("cow");
-        }
-        private void Close()
-        {
-            Debug.WriteLine("Close");
+            WindowController.Instance.OpenNew(App.userdata.ShortCut1);
         }
 
+        public override void Cow()
+        {
+            WindowController.Instance.OpenNew(App.userdata.ShortCut2);
+        }
+
+        public override void Close()
+        {
+            if (WindowController.Instance.SetAppWindowsActive())
+            {
+                Messenger.Default.Send(new NavigateRequest());
+            }
+            Debug.WriteLine("close");
+        }
+
+        #endregion
 
         bool hasChange = false;
 
@@ -249,67 +270,4 @@ namespace GestureBaseUI_Project
 
 
     }
-
-    /*
-    public class ActionCounter
-    {
-        private int[] MIN_FOR_CHANGE = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 };
-        private int[] count = new int[13];
-        private int last = 0;
-        private int actual = 0;
-
-
-        public ActionCounter()
-        {
-            setAllMin(10);
-        }
-        public ActionCounter(int start)
-        {
-            actual = start;
-
-        }
-
-        private void setAllMin(int value)
-        {
-            for (int i = 0; i < MIN_FOR_CHANGE.Length; i++)
-            {
-                MIN_FOR_CHANGE[i] = value;
-            }
-        }
-        public void SetAction(int num)
-        {
-            count[actual] = 0;
-            actual = num;
-            last = num;
-        }
-
-        public int Count(int value)
-        {
-            // no change
-            if (value == actual)
-            {
-
-            }
-            else
-            if (value != last)
-            {
-                count[last] = 0;
-                count[value]++;
-                last = value;
-
-            }
-            else
-            {
-                count[value]++;
-                if (count[value] >= MIN_FOR_CHANGE[value])
-                {
-                    actual = value;
-                }
-            }
-            return actual;
-
-
-        }
-    }
-    */
 }
