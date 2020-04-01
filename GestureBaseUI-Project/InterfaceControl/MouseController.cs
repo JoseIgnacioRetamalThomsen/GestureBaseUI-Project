@@ -122,6 +122,14 @@ namespace GestureBaseUI_Project
             mouse_event((uint)MouseEventFlags.LEFTDOWN | (uint)MouseEventFlags.LEFTUP, 0, 0, 0, 0);
 
         }
+
+        internal Win32Point GetMousePosition()
+        {
+            Win32Point ptr = new Win32Point();
+            GetCursorPos(ref ptr);
+
+            return ptr;
+        }
         #endregion
 
     }

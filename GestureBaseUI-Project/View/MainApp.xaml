@@ -28,13 +28,17 @@
 
                 <Button Click="BackButton" Content="{DynamicResource back}" Width="50" Height="30" Style="{DynamicResource ButtonStyle}"/>
 
+                <StackPanel Grid.Column="1" Grid.Row="1">
+
+                    <StackPanel  Orientation="Horizontal">
+
+                        <TextBlock Text="{Binding SliderValue}" Width="100" FontSize="30" Foreground="White" TextAlignment="Center"/>
+                        <Slider Width="400" Value="{Binding SliderValue}" Minimum="2" Maximum="30" TickFrequency="1" />
+
+                    </StackPanel>
+                </StackPanel>
 
                 <StackPanel  x:Name="Links" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" >
-
-
-
-
-
 
                     <ListView 
                               x:Name="LinksView" 

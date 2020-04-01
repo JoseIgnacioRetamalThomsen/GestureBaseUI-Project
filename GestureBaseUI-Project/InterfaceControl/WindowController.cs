@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Text;
+using System.Threading;
 using static GestureBaseUI_Project.Win32Wrapper.WindowW32W;
 
 namespace GestureBaseUI_Project
@@ -222,6 +223,8 @@ namespace GestureBaseUI_Project
         public void OpenNew(string fullPath)
         {
             Process.Start(fullPath);
+          
+            
         }
     }
 }

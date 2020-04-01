@@ -55,6 +55,8 @@ namespace GestureBaseUI_Project
 
         private int movedistance = 20;
 
+        
+
         public HandPositionMapper(Vector2 screenSize)
         {
             _screenSize = screenSize;
@@ -63,7 +65,7 @@ namespace GestureBaseUI_Project
       
 
 
-
+        
         public void startMoving(Vector2 startMousePosition, Vector2 startHandPosition)
         {
             this._startMousePosition = startMousePosition;
@@ -106,10 +108,154 @@ namespace GestureBaseUI_Project
         }
 
 
+        private Vector2 startPosition = new Vector2();
+        Win32Point lastPosition = new Win32Point() { };
+        public void StartMoving(Vector2 handPosition)
+        {
+            lastPosition = MouseController.Instance.GetMousePosition();
+            startPosition = handPosition;
+
+            next.X = lastPosition.X;
+            next.Y = lastPosition.Y;
+            Debug.WriteLine("mouse position + x:" + lastPosition.X + " y: " + lastPosition.Y);
+        }
+
+        Win32Point next = new Win32Point();
+
+        public Win32Point GetNextDis(Vector2 newHandPosition)
+        {
+            float dx = newHandPosition.X - startPosition.X;
+            float dy = newHandPosition.Y - startPosition.Y;
+            float dxA = Math.Abs(dx);
+            float dyA = Math.Abs(dy);
+
+            Debug.WriteLine("Dx: " + dx);
+            
+
+            int dxspeed = 0;
+            if (dxA < 70)
+            {
+                dxspeed = 10;
+            }
+            else if (dxA < 90)
+            {
+                dxspeed = 20;
+            } else if (dxA < 110)
+            {
+                dxspeed = 30;
+            } else if (dxA < 150)
+            {
+                dxspeed = 60;
+            } /*else if (dxA < 35)
+            {
+                dxspeed = 30;
+
+            } else if (dxA < 50)
+            {
+                dxspeed = 40;
+            } else if (dxA < 70)
+            {
+                dxspeed = 50;
+            }
+            else if (dxA < 100)
+            {
+                dxspeed = 79;
+            } else {
+                dxspeed = 100;
+            }
+            */
+
+            
+            int dyspeed = 0;
+            if (dyA < 70)
+            {
+                dyspeed = 10;
+            }
+            else if (dyA < 90)
+            {
+                dyspeed = 20;
+            }
+            else if (dyA < 110)
+            {
+                dyspeed = 30;
+            }
+            else if (dyA < 150)
+            {
+                dyspeed = 60;
+            }/*
+            else if (dyA < 35)
+            {
+                dyspeed = 30;
+
+            }
+            else if (dyA < 50)
+            {
+                dyspeed = 40;
+            }
+            else if (dyA < 70)
+            {
+                dyspeed = 50;
+            }
+            else if (dyA < 100)
+            {
+                dyspeed = 79;
+            }
+            else
+            {
+                dyspeed = 100;
+            }
+
+            */
+
+            if (dxA > 50)
+            {
+                if (dx < 0)
+                {
+                    next.X = lastPosition.X + dxspeed;//(int)(dxA * 0.2);
+                }
+                else if (dx > 0)
+                {
+                    next.X = lastPosition.X - dxspeed;//(int)(dxA * 0.2);
+                }
+            }
+            
+            if (dyA > 30)
+            {
+                if(dy < 0 )
+                {
+                    next.Y = lastPosition.Y - dyspeed; //(int)(dyA * 0.2);
+                }else if(dy > 0)
+                {
+                    next.Y = lastPosition.Y + dyspeed; //(int)(dyA * 0.2);
+                }
+            }
+
+            if (next.X > screen.Right)
+            {
+                next.X = (int)screen.Right;
+            }else if(next.X < screen.Left)
+            {
+                next.X = 0;
+            }
+
+           
+            if (next.Y > screen.Bottom)
+            {
+                next.Y = (int)screen.Bottom;
+            }
+            else if (next.Y < 0)
+            {
+                next.Y = 0;
+            }
+
+            lastPosition = next;
+            return next;
+        }
+
         public Win32Point getNextPosition(Vector2 newHandPosition)
         {
             if(Math.Abs(oldHandPosition.Y- newHandPosition.Y) >500 || Math.Abs(oldHandPosition.X - newHandPosition.X) > 500
-            || Math.Abs(oldHandPosition.Y- newHandPosition.Y) <1 || Math.Abs(oldHandPosition.X - newHandPosition.X) < 1)
+            || Math.Abs(oldHandPosition.Y- newHandPosition.Y) <2 || Math.Abs(oldHandPosition.X - newHandPosition.X) < 2)
                 {
               
                 if (f)
@@ -125,8 +271,8 @@ namespace GestureBaseUI_Project
             float xh = -(moveArea.Left+newHandPosition.X);
             float yh =   -(moveArea.Top -newHandPosition.Y);
          
-            float ys = yh * relationY*(0.9F) -0.1F;
-            float xs = xh * relationX * (0.9F) - 0.1F;
+            float ys = yh * relationY*(0.7F) -2.5F;
+            float xs = xh * relationX * (0.7F) - 2.5F;
 
             oldHandPosition = newHandPosition;
             last.X = (int)xs;

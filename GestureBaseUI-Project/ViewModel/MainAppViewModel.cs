@@ -41,6 +41,17 @@ namespace GestureBaseUI_Project.ViewModel
         private bool isRunnig = true;
         private MainApp mainApp;
 
+        private int _sliderValue = 10;
+        public int SliderValue
+        {
+            get { return _sliderValue; }
+            set
+            {
+                SetValue(ref _sliderValue, value);
+                actionManager.SetMinForChange(value);
+            }
+        }
+
         public MainAppViewModel(MainApp mainApp)
         {
             this.mainApp = mainApp;
@@ -75,10 +86,20 @@ namespace GestureBaseUI_Project.ViewModel
                     // Debug.WriteLine("Count " + images.Count);
                     float[,] im = images.Take();
 
-                    actionManager.SetPosition(bodyData.Take().HandPosition);
+                    var data = bodyData.Take();
 
-                    actionManager.AddImage(im);
+                    // Debug.WriteLine("hand: " + data.HandPosition.Y + " // elbow: " +data.ElvowPosition.Y);
+                  //  Debug.WriteLine(data.HandPosition.Y < data.ElvowPosition.Y);
+                    if (data.HandPosition.Y -100 < data.ElvowPosition.Y)
+                    {
+                        actionManager.SetPosition(data.HandPosition);
 
+                        actionManager.AddImage(im);
+                    }
+                    else
+                    {
+                        actionManager.SetNotReady();
+                    }
                 }
             }).Start();
 

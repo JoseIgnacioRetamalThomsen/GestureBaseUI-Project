@@ -50,7 +50,13 @@ namespace GestureBaseUI_Project.View
 
         private void NavigateHome(NavigateRequest obj)
         {
-            Dispatcher.Invoke(new Action(() => { this.NavigationService.Navigate(new Home()); }));
+            try
+            {
+
+
+                Dispatcher.Invoke(new Action(() => { this.NavigationService.Navigate(new Home()); }));
+            }
+            catch { }
             
         }
 

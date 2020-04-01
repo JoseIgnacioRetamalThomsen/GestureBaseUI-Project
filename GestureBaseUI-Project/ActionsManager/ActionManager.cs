@@ -63,6 +63,16 @@ namespace GestureBaseUI_Project
         bool ready = false;
         bool moving = false;
 
+        public void SetNotReady()
+        {
+            ready = false;
+        }
+
+        public void  SetMinForChange(int min)
+        {
+            counter.SetAllMin(min);
+        }
+
         public override void Update(int next)
         {
 
@@ -79,7 +89,13 @@ namespace GestureBaseUI_Project
                 if (next == 5)
                 {
                     ready = true;
+
                     Debug.WriteLine("Ready");
+
+                    if (!isFirstMove)
+                    {
+                        isFirstMove = true;
+                    }
                     //Thread.Sleep(500);
                 }
                 else if (actual == 0)
@@ -121,15 +137,30 @@ namespace GestureBaseUI_Project
 
 
         #region Actions Methdos
+
+        private bool isFirstMove = true;
         public override void Moving()
         {
-            MouseController.Instance.SetPosition(lastPoint.X, lastPoint.Y);
+            if (isFirstMove)
+            {
+                Debug.WriteLine("first move");
+                inputMapper.StartMoving(lastHand);
+                isFirstMove = false;
+            }else
+            {
+               // Debug.WriteLine("normal move");
+               var temp =  inputMapper.GetNextDis(lastHand);
+                MouseController.Instance.SetPosition(temp.X,temp.Y);
+
+            }
+           // MouseController.Instance.SetPosition(lastPoint.X, lastPoint.Y);
         }
 
         public override void One()
         {
             MouseController.Instance.Click();
             ready = false;
+            Debug.WriteLine("Click");
         }
 
         public override void Two()
@@ -247,12 +278,12 @@ namespace GestureBaseUI_Project
         }
 
         private Win32Point lastPoint = new Win32Point();
+        private Vector2 lastHand = Vector2.Zero;
         public void SetPosition(Vector3 newpos)
         {
             Win32Point temp = inputMapper.getNextPosition(new Vector2(newpos.X, newpos.Y));
-            //pred.SetPointPosition(1920, 1200);
-            //  pred.SetPointPosition(temp);
-            // MouseController.Instance.SetPosition(temp.X, temp.Y);
+
+            lastHand = new Vector2(newpos.X, newpos.Y);
             lastPoint = temp;
 
             return;
