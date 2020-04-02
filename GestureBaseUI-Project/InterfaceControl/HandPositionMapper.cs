@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Numerics;
+using FLS;
+using FLS.Rules;
 
 
 namespace GestureBaseUI_Project
@@ -25,7 +27,9 @@ namespace GestureBaseUI_Project
         /// <summary>
         /// y constant for scalere from move area to screen area.
         /// </summary>
-        private float relationY; 
+        private float relationY;
+
+        FuzzyMouseSpeed fms;
         public HandPositionMapper(MyRect screen, MyRect moveArea)
         {
             this.screen = screen;
@@ -33,6 +37,8 @@ namespace GestureBaseUI_Project
 
             relationX = screen.Width / moveArea.Width;
             relationY = screen.Height / moveArea.Height;
+
+            fms = new FuzzyMouseSpeed();
         }
 
         private int width, heigth;
@@ -55,12 +61,17 @@ namespace GestureBaseUI_Project
 
         private int movedistance = 20;
 
-        
+       
 
         public HandPositionMapper(Vector2 screenSize)
         {
+
+
             _screenSize = screenSize;
             Debug.WriteLine("Created");
+
+             //variation = new LinguisticVariable("Variation");
+
         }
       
 
@@ -130,10 +141,13 @@ namespace GestureBaseUI_Project
             float dyA = Math.Abs(dy);
 
             Debug.WriteLine("Dx: " + dx);
-            
 
-            int dxspeed = 0;
-            if (dxA < 70)
+
+
+            int dxspeed = (int)fms.Get(dxA);
+
+            Debug.WriteLine(dxspeed);
+            /* if (dxA < 70)
             {
                 dxspeed = 10;
             }
@@ -165,49 +179,49 @@ namespace GestureBaseUI_Project
             }
             */
 
-            
-            int dyspeed = 0;
-            if (dyA < 70)
-            {
-                dyspeed = 10;
-            }
-            else if (dyA < 90)
-            {
-                dyspeed = 20;
-            }
-            else if (dyA < 110)
-            {
-                dyspeed = 30;
-            }
-            else if (dyA < 150)
-            {
-                dyspeed = 60;
-            }/*
-            else if (dyA < 35)
-            {
-                dyspeed = 30;
 
-            }
-            else if (dyA < 50)
-            {
-                dyspeed = 40;
-            }
-            else if (dyA < 70)
-            {
-                dyspeed = 50;
-            }
-            else if (dyA < 100)
-            {
-                dyspeed = 79;
-            }
-            else
-            {
-                dyspeed = 100;
-            }
+            int dyspeed = (int)fms.Get(dyA);
+            /*     if (dyA < 70)
+                  {
+                      dyspeed = 10;
+                  }
+                  else if (dyA < 90)
+                  {
+                      dyspeed = 20;
+                  }
+                  else if (dyA < 110)
+                  {
+                      dyspeed = 30;
+                  }
+                  else if (dyA < 150)
+                  {
+                      dyspeed = 60;
+                  }/*
+                  else if (dyA < 35)
+                  {
+                      dyspeed = 30;
 
-            */
+                  }
+                  else if (dyA < 50)
+                  {
+                      dyspeed = 40;
+                  }
+                  else if (dyA < 70)
+                  {
+                      dyspeed = 50;
+                  }
+                  else if (dyA < 100)
+                  {
+                      dyspeed = 79;
+                  }
+                  else
+                  {
+                      dyspeed = 100;
+                  }
 
-            if (dxA > 50)
+                  */
+
+            if (dxA > 20)
             {
                 if (dx < 0)
                 {
@@ -219,7 +233,7 @@ namespace GestureBaseUI_Project
                 }
             }
             
-            if (dyA > 30)
+            if (dyA > 20)
             {
                 if(dy < 0 )
                 {
