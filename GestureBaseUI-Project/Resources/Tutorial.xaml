@@ -51,6 +51,8 @@
 
     <system:String x:Key="mainapp">Main App</system:String>
 
+    <system:String x:Key="recordimages">Record Images</system:String>
+
     <system:String x:Key="appname">My Windows Interface Control</system:String>
     <system:String x:Key="appdescription">A solution that allows you to control the windows interface using you hands.</system:String>
 
@@ -59,7 +61,16 @@
     <system:String x:Key="practicebody1">Before each action, you need first to perform the ready action.</system:String>
     <system:String x:Key="practicebody2">You can set the time to perform the action using the bottom slider,
 this time will depend on your speed and computer.</system:String>
-    
+
+    <system:String x:Key="help1">Start with the tutorial to learn the gestures.</system:String>
+    <system:String x:Key="help2">Use the training to practice the gestures.</system:String>
+    <system:String x:Key="help3">Use the main app to control the windows interface with your hands.</system:String>
+
+
+   
+  
+
+
 
 
 </ResourceDictionary>

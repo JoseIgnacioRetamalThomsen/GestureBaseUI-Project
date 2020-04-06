@@ -48,7 +48,7 @@ namespace GestureBaseUI_Project
 
         #endregion
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void RecordImages_Click(object sender, RoutedEventArgs e)
         {
             this.NavigationService.Navigate(new DataCollectionView());
         }

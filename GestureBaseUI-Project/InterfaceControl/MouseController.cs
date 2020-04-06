@@ -58,9 +58,6 @@ namespace GestureBaseUI_Project
                   
         #region public acces methods 
 
-      
-       
-
         public void SetPosition(int x, int y)
         {
             SetCursorPos(x, y);

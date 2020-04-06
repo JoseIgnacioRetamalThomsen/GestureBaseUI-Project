@@ -29,6 +29,7 @@
                 <Button Click="BackButton" Content="{DynamicResource back}" Width="50" Height="30" Style="{DynamicResource ButtonStyle}"/>
 
                 <StackPanel Grid.Column="1" Grid.Row="1">
+                    <Label FontSize="24" FontFamily="Verdana" Foreground="White">Sensitive Control</Label>
 
                     <StackPanel  Orientation="Horizontal">
 
@@ -37,41 +38,42 @@
 
                     </StackPanel>
                 </StackPanel>
+                <Label FontSize="24" FontFamily="Verdana" Foreground="White">Sensitive Control</Label>
+                <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+                    <StackPanel  x:Name="Links"  >
 
-                <StackPanel  x:Name="Links" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" >
-
-                    <ListView 
+                        <ListView 
                               x:Name="LinksView" 
                               HorizontalAlignment="Stretch"
                               VerticalAlignment="Top">
 
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="5" HorizontalAlignment="Stretch"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_PreviewMouseLeftButtonDown"  />
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="5" HorizontalAlignment="Stretch"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_PreviewMouseLeftButtonDown"  />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
 
-                                <StackPanel  Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                    <StackPanel  Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
-                                    <Image  Source="{Binding ImageData}" Width="100" HorizontalAlignment="Stretch" VerticalAlignment="Top" Stretch="UniformToFill" />
+                                        <Image  Source="{Binding ImageData}" Width="100" HorizontalAlignment="Stretch" VerticalAlignment="Top" Stretch="UniformToFill" />
 
-                                    <TextBlock Text="{Binding Title}" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                                        <TextBlock Text="{Binding Title}" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
 
-                                </StackPanel>
+                                    </StackPanel>
 
 
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
                 </StackPanel>
-
 
 
 
@@ -83,5 +85,5 @@
 
     </Grid>
 
-  
+
 </Page>
