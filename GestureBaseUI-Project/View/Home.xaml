@@ -9,8 +9,6 @@
       d:DesignHeight="550" d:DesignWidth="200"
       Title="Home">
 
-
-
     <Grid Background="#212121">
         <Border CornerRadius="5" BorderBrush="#223D4F" BorderThickness="5" Margin="35" Padding="0">
 
@@ -30,30 +28,35 @@
                             <ColumnDefinition Width="2*" />
 
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Margin="10,10,10,10" Foreground="White" FontSize="52" Style="{DynamicResource FontType}">My Windows Interface Control</TextBlock>
-                        <Button Grid.Column="1"  Margin="10,10,10,10"   Click="Button_Click" Width="52" Height="52" FontSize="38" HorizontalAlignment="Right" Style="{DynamicResource ButtonStyle}">?</Button>
-                        
+                        <TextBlock Grid.Column="0" Text="{DynamicResource appname}" Margin="10,10,10,10" Foreground="White" FontSize="52" Style="{DynamicResource FontType}"/>
+                        <Button Grid.Column="1"  Margin="10,10,10,10"   Click="Tutorial_Click" Width="52" Height="52" FontSize="38" HorizontalAlignment="Right" Style="{DynamicResource ButtonStyle}">?</Button>
+
                     </Grid>
 
-                    <TextBlock  Foreground="#F4D14B" FontSize="22" Style="{DynamicResource FontType}">A solution that allows you to control the windows interface using you hands</TextBlock>
-                    <TextBlock>Bllaa</TextBlock>
-                    <TextBlock>Bllaa</TextBlock>
-                    <TextBlock>Bllaa</TextBlock>
-                    <TextBlock>Bllaa</TextBlock>
-                    <TextBlock>Bllaa</TextBlock>
-                    <TextBlock>Bllaa</TextBlock>
-                    <TextBlock>Bllaa</TextBlock>
-                    <TextBlock>Bllaa</TextBlock>
-                    <TextBlock>Bllaa</TextBlock>
-                    <TextBlock>Bllaa</TextBlock>
-                    <TextBlock>Bllaa</TextBlock>
+                    <TextBlock   Text="{DynamicResource appdescription}" Foreground="#F4D14B" FontSize="22" Style="{DynamicResource FontType}"/>
+                    <StackPanel Orientation="Horizontal" Margin="20">
+                        <Image Source="/Images/HandGestureIcons/a_point_0.png" Width="100" Height="100" />
+                        <Image Source="/Images/HandGestureIcons/aa_one_1.png" Width="100" Height="100" />
+                        <Image Source="/Images/HandGestureIcons/b_two_2.png" Width="100" Height="100" />
+                        <Image Source="/Images/HandGestureIcons/c_three_3.png" Width="100" Height="100" />
+                        <Image Source="/Images/HandGestureIcons/d_four_4.png" Width="100" Height="100" />
+                        <Image Source="/Images/HandGestureIcons/e_five_5.png" Width="100" Height="100" />
+                        <Image Source="/Images/HandGestureIcons/k_surf_10.png" Width="100" Height="100" />
+                        <Image Source="/Images/HandGestureIcons/l_gesture_11.png" Width="100" Height="100" />
+                        <Image Source="/Images/HandGestureIcons/m_close_12.png" Width="100" Height="100" />
+
+
+
+                    </StackPanel>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Background="#1D3442">
-                    <Button  Margin="10,10,10,10"   Click="Button_Click" Style="{DynamicResource ButtonStyle}">View</Button>
-                    <Button Margin="10,10,10,10"   Click="Recorder_Button_Click" Style="{DynamicResource ButtonStyle}">Record Iamges For train</Button>
-                    <Button  Margin="10,10,10,10"  Click="Button_Click_1" Style="{DynamicResource ButtonStyle}">Prediction</Button>
-                    <Button  Margin="10,10,10,10"  Click="Button_Voice_Command_On" Style="{DynamicResource ButtonStyle}">Voice Command</Button>
+
+                    <Button  Margin="10,10,10,10"   Click="Tutorial_Click" Style="{DynamicResource ButtonStyle}" Content="{DynamicResource tutorial}"/>
+                    <Button  Margin="10,10,10,10"  Click="PracticelTutorial" Style="{DynamicResource ButtonStyle}" Content="{DynamicResource practice}"/>
+                    <Button  Margin="10,10,10,10"  Click="Button_Click_2"  Style="{DynamicResource ButtonStyle}" Content="{DynamicResource mainapp}"/>
+                    <Button  Margin="10,10,10,10"  Click="RecordImages_Click"  Style="{DynamicResource ButtonStyle}" Content="{DynamicResource recordimages}"/>
+
 
                 </StackPanel>
 
@@ -61,17 +64,17 @@
 
                     <Border CornerRadius="5" BorderBrush="Black" BorderThickness="5" Margin="10" Padding="0">
                         <StackPanel Background="Black" Margin="0,0,0,0" VerticalAlignment="Bottom" >
-                      
-                            <TextBlock Foreground="White" FontSize="20" Style="{DynamicResource FontType}">Select main app for use the interface controller.</TextBlock>
-                            <TextBlock Foreground="White" FontSize="20" Style="{DynamicResource FontType}">Record Hand gestures for Personilize the gestures.</TextBlock>
-                            <TextBlock Foreground="White" FontSize="20" Style="{DynamicResource FontType}">View for check how azure kinect cameras work.</TextBlock>
-                            <TextBlock Foreground="White" FontSize="20" Style="{DynamicResource FontType}">Question mark at top right corner for extra help :)</TextBlock>
 
-                      
+                            <TextBlock Foreground="White" FontSize="20" Style="{DynamicResource FontType}" Text="{DynamicResource help1}" />
+                            <TextBlock Foreground="White" FontSize="20" Style="{DynamicResource FontType}" Text="{DynamicResource help2}"/>
+                            <TextBlock Foreground="White" FontSize="20" Style="{DynamicResource FontType}" Text="{DynamicResource help3}"/>
 
-                    </StackPanel>
+
+
+
+                        </StackPanel>
                     </Border>
-                    
+
                     <ctr:LoadingPanel x:Name="loadingPanel"
                         IsLoading="{Binding PanelLoading}"
                         Message="{Binding PanelMainMessage}"

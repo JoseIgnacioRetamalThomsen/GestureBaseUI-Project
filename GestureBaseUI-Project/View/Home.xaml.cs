@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Speech.Recognition;
+using GestureBaseUI_Project.View;
 using GestureBaseUI_Project.ViewModel;
 using System.Speech.Recognition;
 using System.Globalization;
@@ -33,13 +23,14 @@ namespace GestureBaseUI_Project
             //Create and sets the view model.
             _viewModel = new HomeViewModel();
             DataContext = _viewModel;
+            this.Resources.MergedDictionaries.Add(App.resdict);
             
         }
 
         #region Navigation
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Tutorial_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new PictureRecorder());
+            this.NavigationService.Navigate(new TutorialView());
         }
 
         private void Recorder_Button_Click(object sender, RoutedEventArgs e)
@@ -47,10 +38,17 @@ namespace GestureBaseUI_Project
             this.NavigationService.Navigate(new Recorder());
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void PracticelTutorial(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new Prediction());
+            this.NavigationService.Navigate(new PracticeTutorial());
         }
+
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new MainApp());
+        }
+
 
         //Adapted from https://docs.microsoft.com/en-us/dotnet/api/system.speech.recognition.speechrecognitionengine.recognize?view=netframework-4.8
         public void Button_Voice_Command_On(object sender, RoutedEventArgs e)
@@ -101,6 +99,12 @@ namespace GestureBaseUI_Project
 
     
         }
+
         #endregion
+
+        private void RecordImages_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new DataCollectionView());
+        }
     }
 }
