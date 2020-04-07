@@ -56,6 +56,7 @@
                     <Button  Margin="10,10,10,10"  Click="PracticelTutorial" Style="{DynamicResource ButtonStyle}" Content="{DynamicResource practice}"/>
                     <Button  Margin="10,10,10,10"  Click="Button_Click_2"  Style="{DynamicResource ButtonStyle}" Content="{DynamicResource mainapp}"/>
                     <Button  Margin="10,10,10,10"  Click="RecordImages_Click"  Style="{DynamicResource ButtonStyle}" Content="{DynamicResource recordimages}"/>
+                    <Button  Margin="10,10,10,10"  Click="Button_Voice_Command_On"  Style="{DynamicResource ButtonStyle}" Content="{DynamicResource voicecommand}"/>
 
 
                 </StackPanel>

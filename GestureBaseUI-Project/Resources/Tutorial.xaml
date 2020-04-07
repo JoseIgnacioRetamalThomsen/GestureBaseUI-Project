@@ -53,6 +53,8 @@
 
     <system:String x:Key="recordimages">Record Images</system:String>
 
+    <system:String x:Key="voicecommand">Voice Command</system:String>
+
     <system:String x:Key="appname">My Windows Interface Control</system:String>
     <system:String x:Key="appdescription">A solution that allows you to control the windows interface using you hands.</system:String>
 
