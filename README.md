@@ -8,6 +8,7 @@ Please not forget to checkout the wiki
 
 # Screencast
 
+https://raw.githubusercontent.com/JoseIgnacioRetamalThomsen/GestureBaseUI-Project/master/video/GestureProject.mp4
 
 
 # Check how we train the CNN using jupyter notebook
