@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Numerics;
 using System.Diagnostics;
 using System.Collections.Concurrent;
-using GestureBaseUI_Project.model;
+
 
 namespace GestureBaseUI_Project
 {

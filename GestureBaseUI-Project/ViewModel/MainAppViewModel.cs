@@ -39,8 +39,15 @@ namespace GestureBaseUI_Project.ViewModel
         /// Control loop for taking images from queue
         /// </summary>
         private bool isRunnig = true;
+        
+        /// <summary>
+        /// the main app reference
+        /// </summary>
         private MainApp mainApp;
 
+        /// <summary>
+        /// Control sensitive value in slides
+        /// </summary>
         private int _sliderValue = 10;
         public int SliderValue
         {
@@ -52,6 +59,10 @@ namespace GestureBaseUI_Project.ViewModel
             }
         }
 
+        /// <summary>
+        /// Create object
+        /// </summary>
+        /// <param name="mainApp"></param>
         public MainAppViewModel(MainApp mainApp)
         {
             this.mainApp = mainApp;
@@ -78,7 +89,7 @@ namespace GestureBaseUI_Project.ViewModel
             Task.Factory.StartNew(() => { predictor = new MainCamera(images, bodyData); });
 
 
-
+            //thread that take images from queue
             new Thread(() =>
             {
                 while (isRunnig)
@@ -88,8 +99,6 @@ namespace GestureBaseUI_Project.ViewModel
 
                     var data = bodyData.Take();
 
-                    // Debug.WriteLine("hand: " + data.HandPosition.Y + " // elbow: " +data.ElvowPosition.Y);
-                  //  Debug.WriteLine(data.HandPosition.Y < data.ElvowPosition.Y);
                     if (data.HandPosition.Y -100 < data.ElvowPosition.Y)
                     {
                         actionManager.SetPosition(data.HandPosition);
@@ -110,7 +119,10 @@ namespace GestureBaseUI_Project.ViewModel
 
         }
 
-
+        /// <summary>
+        /// Load lins in interface
+        /// </summary>
+        /// <param name="obj"></param>
         private void UpdateList(UpdateListRequest obj)
         {
             LoadLinks();

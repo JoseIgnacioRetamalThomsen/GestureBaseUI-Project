@@ -42,6 +42,16 @@ namespace GestureBaseUI_Project
         private int actual = 5;
 
         /// <summary>
+        /// Decide when is ready for input new commands
+        /// </summary>
+        bool ready = false;
+
+        /// <summary>
+        /// Use for check when the user start moving the cursor.
+        /// </summary>
+        private bool isFirstMove = true;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="mousecontroller"></param>
@@ -49,7 +59,6 @@ namespace GestureBaseUI_Project
         public ActionManager(HandPositionMapper mousecontroller, MainAppViewModel vm) : base()
         {
 
-            //InitActions();
             _viewModel = vm;
             this.inputMapper = mousecontroller;
 
@@ -59,26 +68,33 @@ namespace GestureBaseUI_Project
 
         }
 
-
-        bool ready = false;
-        bool moving = false;
-
+        /// <summary>
+        /// Change state to not ready
+        /// </summary>
         public void SetNotReady()
         {
             ready = false;
         }
 
-        public void  SetMinForChange(int min)
+        /// <summary>
+        ///  Set minimun amount of prediction for decitions,
+        ///  this is the gesture sensibility.
+        /// </summary>
+        /// <param name="min"></param>
+        public void SetMinForChange(int min)
         {
             counter.SetAllMin(min);
         }
 
+        /// <summary>
+        /// Update user actions on interface
+        /// </summary>
+        /// <param name="next"></param>
         public override void Update(int next)
         {
-
+            // if ready a new action can be performed
             if (ready)
             {
-
                 if (next == 5) return;
                 ready = false;
                 actual = next;
@@ -88,15 +104,13 @@ namespace GestureBaseUI_Project
             {
                 if (next == 5)
                 {
-                    ready = true;
-
-                    Debug.WriteLine("Ready");
+                    Ready();
 
                     if (!isFirstMove)
                     {
                         isFirstMove = true;
                     }
-                    //Thread.Sleep(500);
+
                 }
                 else if (actual == 0)
                 {
@@ -114,72 +128,58 @@ namespace GestureBaseUI_Project
 
 
         }
-        /*
-        private void InitActions()
-        {
-            this.actions = new Dictionary<string, Action>();
-            this.actions.Add("0", Moving);
-            this.actions.Add("1", One);
-            this.actions.Add("2", Two);
-            this.actions.Add("3", Three);
-            this.actions.Add("4", Four);
-            this.actions.Add("5", Ready);
-            this.actions.Add("6", WaveDown);
-            this.actions.Add("7", Waveup);
-            this.actions.Add("8", WaveLeft);
-            this.actions.Add("9", WaveRigth);
-            this.actions.Add("10", Surf);
-            this.actions.Add("11", Cow);
-            this.actions.Add("12", Close);
-
-        }
-        */
-
 
         #region Actions Methdos
 
-        private bool isFirstMove = true;
+        /// <summary>
+        /// Move the cursor
+        /// </summary>
         public override void Moving()
         {
             if (isFirstMove)
             {
-                Debug.WriteLine("first move");
                 inputMapper.StartMoving(lastHand);
                 isFirstMove = false;
-            }else
-            {
-               // Debug.WriteLine("normal move");
-               var temp =  inputMapper.GetNextDis(lastHand);
-                MouseController.Instance.SetPosition(temp.X,temp.Y);
-
             }
-           // MouseController.Instance.SetPosition(lastPoint.X, lastPoint.Y);
+            else
+            {
+                var temp = inputMapper.GetNextDis(lastHand);
+                MouseController.Instance.SetPosition(temp.X, temp.Y);
+            }
         }
 
+        /// <summary>
+        /// Geture one click
+        /// </summary>
         public override void One()
         {
             MouseController.Instance.Click();
             ready = false;
-            Debug.WriteLine("Click");
         }
 
+        /// <summary>
+        /// Double click
+        /// </summary>
         public override void Two()
         {
             MouseController.Instance.DoubleClick();
             ready = false;
         }
 
+        /// <summary>
+        /// User shortcut
+        /// </summary>
         public override void Three()
         {
-
-            //C:\Users\pepe\eclipse\java-2019-09\eclipse\eclipse.exe
+                 
             Debug.WriteLine("Three");
-           // Process.Start("C:/Program Files (x86)/Google/Chrome/Application/chrome.exe");
-
-           // AskUpdate();
+         
             ready = false;
         }
 
+        /// <summary>
+        /// Close actual windows.
+        /// </summary>
         public override void Four()
         {
             WindowController.Instance.CloseActualWindow();
@@ -188,7 +188,7 @@ namespace GestureBaseUI_Project
 
         public override void Ready()
         {
-            Debug.WriteLine("Ready");
+            ready = true;
         }
 
         public override void WaveDown()
@@ -270,8 +270,11 @@ namespace GestureBaseUI_Project
 
         #endregion
 
-        bool hasChange = false;
-
+        /// <summary>
+        /// Add a new image, the images is given to the model wich returns a prediciton.
+        /// Then the prediciton is counted and the results is use for update the interface.
+        /// </summary>
+        /// <param name="image"></param>
         public void AddImage(float[,] image)
         {
             Update(counter.Count(model.Predict(image)));
