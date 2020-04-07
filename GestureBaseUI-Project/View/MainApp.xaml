@@ -40,7 +40,7 @@
                 </StackPanel>
               
                 <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
-                    <Label FontSize="24" FontFamily="Verdana" Foreground="White">Sensitive Control</Label>
+                    <Label FontSize="24" FontFamily="Verdana" Foreground="White">Active Applications</Label>
                     <StackPanel  x:Name="Links"  >
 
                         <ListView 
