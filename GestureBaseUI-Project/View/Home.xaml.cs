@@ -84,7 +84,7 @@ namespace GestureBaseUI_Project
                     }
                     else if(text.Contains("record") == true)
                         {
-                         this.NavigationService.Navigate(new Prediction());
+                         this.NavigationService.Navigate(new TutorialView());
                         }
                     else if (text.Contains("view") == true)
                         {

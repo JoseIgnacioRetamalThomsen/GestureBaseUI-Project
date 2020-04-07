@@ -10,13 +10,15 @@ using System.Threading.Tasks;
 using System.Numerics;
 using System.Diagnostics;
 using System.Collections.Concurrent;
-using GestureBaseUI_Project.model;
+
 
 namespace GestureBaseUI_Project
 {
     public class CameraForPrediction
     {
-
+        /// <summary>
+        /// output images
+        /// </summary>
         BlockingCollection<float[,]> images; 
                 
         private readonly Transformation transform = null;

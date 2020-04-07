@@ -8,6 +8,9 @@ using System.Windows.Input;
 
 namespace GestureBaseUI_Project.ViewModel
 {
+    /// <summary>
+    /// Home page view model
+    /// </summary>
     public class HomeViewModel :BaseViewModel
     {
 
@@ -57,9 +60,7 @@ namespace GestureBaseUI_Project.ViewModel
             get
             {
                 return new DelegateCommand(() =>
-                {
-                    // Your code here.
-                    // You may want to terminate the running thread etc.
+                {                   
                     Debug.WriteLine("working");
                     PanelLoading = false;
                 });
