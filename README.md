@@ -6,7 +6,11 @@ Everyone is used to control the computer by using the keyboard and the mouse, wi
 
 Please not forget to checkout the wiki
 
-# Check our screencast
+# Screencast
+
 
 
 # Check how we train the CNN using jupyter notebook
+
+
+https://nbviewer.jupyter.org/github/JoseIgnacioRetamalThomsen/GestureBaseUI-Project/blob/master/model/Gesture_model_train.ipynb
