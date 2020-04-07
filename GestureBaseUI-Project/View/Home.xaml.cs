@@ -4,6 +4,7 @@ using GestureBaseUI_Project.View;
 using GestureBaseUI_Project.ViewModel;
 using System.Speech.Recognition;
 using System.Globalization;
+using System;
 
 namespace GestureBaseUI_Project
 {
@@ -83,7 +84,7 @@ namespace GestureBaseUI_Project
                     }
                     else if(text.Contains("record") == true)
                         {
-                         this.NavigationService.Navigate(new Prediction());
+                         this.NavigationService.Navigate(new TutorialView());
                         }
                     else if (text.Contains("view") == true)
                         {

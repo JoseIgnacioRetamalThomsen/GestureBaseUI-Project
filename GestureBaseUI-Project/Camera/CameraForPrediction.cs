@@ -16,7 +16,9 @@ namespace GestureBaseUI_Project
 {
     public class CameraForPrediction
     {
-
+        /// <summary>
+        /// output images
+        /// </summary>
         BlockingCollection<float[,]> images; 
                 
         private readonly Transformation transform = null;
