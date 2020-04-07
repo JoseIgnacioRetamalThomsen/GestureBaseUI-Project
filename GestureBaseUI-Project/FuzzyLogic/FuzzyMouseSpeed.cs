@@ -39,7 +39,7 @@ namespace GestureBaseUI_Project
             var speed = new LinguisticVariable("Speed");
             var slow = speed.MembershipFunctions.AddTrapezoid("slow", 0, 0,5, 10);
             var normal = speed.MembershipFunctions.AddTrapezoid("normal", 10, 20, 30, 40);
-            var fast = speed.MembershipFunctions.AddTriangle("fast", 40, 70, 70);
+            var fast = speed.MembershipFunctions.AddTriangle("fast", 20, 70, 70);
             
             //fuzzy rules
             var rule1 = Rule.If(variation.Is(litle)).Then(speed.Is(slow));

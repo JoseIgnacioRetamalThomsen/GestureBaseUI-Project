@@ -81,6 +81,8 @@ namespace GestureBaseUI_Project.Camera
         private const int actualPhotoWidht = 30;
         private const int actualPhotoHeight = 30;
         private const int squareRadious = 150;
+        private const int d1 = 150;
+        private const int d2 =  50;
         private async void StartCamera()
         {
             //Start body track and sensor camera
@@ -215,10 +217,10 @@ namespace GestureBaseUI_Project.Camera
                                                 }
 
                                                 //select pixels insede the selected deep
-                                                if (depthPixels[i] < handPositionColor.Z + 50 && depthPixels[i] > handPositionColor.Z - 150 && depthPixels[i] != 0)
+                                                if (depthPixels[i] < handPositionColor.Z + d2 && depthPixels[i] > handPositionColor.Z - d1 && depthPixels[i] != 0)
                                                 {
                                                     //scale actual depth
-                                                    float deep = (((int)depthPixels[i] - ((int)handPositionColor.Z - 150)) * 250) / 200;
+                                                    float deep = (((int)depthPixels[i] - ((int)handPositionColor.Z - d1)) * 250) / 200;
                                                    
 
                                                     uint xs = (uint)((x - xref) / 10);
