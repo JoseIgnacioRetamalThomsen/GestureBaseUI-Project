@@ -26,6 +26,13 @@ namespace GestureBaseUI_Project.View
             _viewModel = new PracticeTutorialViewModel();
             this.DataContext = _viewModel;
             this.Resources.MergedDictionaries.Add(App.resdict);
+            this.Unloaded += _viewModel.TutorialView_Unloaded;
+        }
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new Home());
         }
     }
 }
+

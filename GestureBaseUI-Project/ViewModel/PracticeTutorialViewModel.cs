@@ -199,6 +199,17 @@ namespace GestureBaseUI_Project.ViewModel
         }
 
         /// <summary>
+        /// Stop threads.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void TutorialView_Unloaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this.isRunning = false;
+            this.predictor.Close();
+        }
+
+        /// <summary>
         /// Set the gesture image in the view.
         /// </summary>
         /// <param name="value"></param>
