@@ -51,10 +51,12 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Background="#1D3442">
+
                     <Button  Margin="10,10,10,10"   Click="Tutorial_Click" Style="{DynamicResource ButtonStyle}" Content="{DynamicResource tutorial}"/>
                     <Button  Margin="10,10,10,10"  Click="PracticelTutorial" Style="{DynamicResource ButtonStyle}" Content="{DynamicResource practice}"/>
                     <Button  Margin="10,10,10,10"  Click="Button_Click_2"  Style="{DynamicResource ButtonStyle}" Content="{DynamicResource mainapp}"/>
                     <Button  Margin="10,10,10,10"  Click="RecordImages_Click"  Style="{DynamicResource ButtonStyle}" Content="{DynamicResource recordimages}"/>
+
 
                 </StackPanel>
 
