@@ -139,8 +139,6 @@ namespace GestureBaseUI_Project.ViewModel
             am = new PracticeActionManager(this);
             SetupActionManager();
 
-
-
             //start and create predictor
             Task.Factory.StartNew(() => { predictor = new MainCamera(this.images, bodyData); });
 

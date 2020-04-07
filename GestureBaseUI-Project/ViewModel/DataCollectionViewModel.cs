@@ -135,8 +135,7 @@ namespace GestureBaseUI_Project.ViewModel
          
             //set image
             SetGestureImage(0);
-
-
+            
             cam = new DataCollectionCamera(ref bitmapColorCamera, this);
 
         }
